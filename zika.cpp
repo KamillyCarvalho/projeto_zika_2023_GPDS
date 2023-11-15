@@ -175,8 +175,8 @@ int rotina()
     #endif
 
 
-    float initialX = 0.0;
-    float initialY = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (pressaoInicial - 2 * limiteY))) + limiteY;
+    double initialX = 0.0;
+    double initialY = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (pressaoInicial - 2 * limiteY))) + limiteY;
 
     for (int i = 0; i < NUM_ARTERIAS; i++)
     {
@@ -200,7 +200,7 @@ int rotina()
 
         particulaAtual++;
         initialX = 0.0;
-        initialY = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (pressaoInicial - 2 * limiteY))) + limiteY;
+        initialY = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (pressaoInicial - 2 * limiteY))) + limiteY;
 
         arteriaAtual = 0;
         contadorAbsorvidas = 0;
