@@ -37,10 +37,14 @@ const double fracaoRefletida = 1 - fracaoAbsorvida;
 const double limiteY = 1e-3;
 const double passoY = 1e-3;
 
-const std::vector<int> estagio1 = {6558050, 7906264, 8655256, 8899930};
-const std::vector<int> estagio2 = {13201581, 36097470, 53530880, 43530297};
-const std::vector<int> estagio3 = {2627406, 7205390, 10647480, 8617887};
+// const std::vector<int> estagio1 = {6558050, 7906264, 8655256, 8899930};
+// const std::vector<int> estagio2 = {13201581, 36097470, 53530880, 43530297};
+// const std::vector<int> estagio3 = {2627406, 7205390, 10647480, 8617887};
+const std::vector<int> estagio1 = {100000, 100000, 100000, 100000};
+const std::vector<int> estagio2 = {100000, 100000, 100000, 100000};
+const std::vector<int> estagio3 = {100000, 100000, 100000, 100000};
 const std::vector<std::vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
+const char *nomePastaResultados = "resultados";
 
 /* Geradores de numeros aleatorios */
 std::default_random_engine geradorDistNormal;
@@ -51,7 +55,7 @@ std::discrete_distribution<int> distribuicaoAbsorcaoReflexao(fracaoAbsorvida, fr
 
 /* Variaveis GLOBAIS utilizadas na simulacao */
 int semana = 0;
-int quantidadeParticulas = 1000000;
+int quantidadeParticulas = 0;
 int arteriaAtual = 0;
 int contadorAbsorvidas = 0;
 int contadorTempoParticula = 0;
@@ -60,28 +64,23 @@ double pressaoHemodinamica = 0.0;
 bool primeiraASerRecebida = true;
 std::vector<double> perfilVelocidade[NUM_ARTERIAS];
 
-/* Arquivos de saida */
-const std::string resultFile1 = "resultados/N0_S0_particleTime.csv";
-const std::string resultFile2 = "resultados/N0_S0_first_delay.csv";    
-const std::string resultFile3 = "resultados/N0_S0_received_particles.csv";
+/* Variaveis para arquivos de saida */
+char* nomeArquivoSaida1 = "resultados/N0_S0_particleTime.csv";
+char* nomeArquivoSaida2 = "resultados/N0_S0_first_delay.csv";    
+char* nomeArquivoSaida3 = "resultados/N0_S0_received_particles.csv";
+std::ofstream arquivoSaida1;
+std::ofstream arquivoSaida2;  
+std::ofstream arquivoSaida3;
 
-std::ofstream resultsFile1;
-std::ofstream resultsFile2;  
-std::ofstream resultsFile3;
 
 
 void updatePosition(double x, double y)
 {
-    int indiceY = (int) (y * 1000);
-    
-    double deltaX = 0; // deslocamento horizontal
-    double deltaY = 0; // deslocamento vertical
-    double incrementoWiener = distribuicaoNormal(geradorDistNormal);
-    double* perfilVelocidadeArteriaAtual = perfilVelocidade[arteriaAtual].data();   
+    int indiceY = (int) (y * 1000); // indice do perfil de velocidade baseado na posicao de y
+    double incrementoWiener = distribuicaoNormal(geradorDistNormal); // incremento da iteracao
+    double* perfilVelocidadeArteriaAtual = perfilVelocidade[arteriaAtual].data();
 
     /* Calculando a posicao */
-    deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[semana][arteriaAtual], perfilVelocidadeArteriaAtual[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
-    
     int forca = 0;
     if (y > resistenciaVascular[rota[arteriaAtual]] or y < resistenciaVascular[rota[arteriaAtual]])
         forca = 1;
@@ -96,7 +95,8 @@ void updatePosition(double x, double y)
         else forca = 1;
     }
     
-    deltaY = calcularDeslocamentoVertical(forca, pressaoVenosa, INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
+    double deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[semana][arteriaAtual], perfilVelocidadeArteriaAtual[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
+    double deltaY = calcularDeslocamentoVertical(forca, pressaoVenosa, INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
 
     x = x + deltaX;
     y = y + deltaY;
@@ -126,12 +126,12 @@ void updatePosition(double x, double y)
     {
         if (primeiraASerRecebida)
         {
-            resultsFile2 << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
+            arquivoSaida2 << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
             primeiraASerRecebida = false;
         }
         if (arteriaAtual == NUM_ARTERIAS - 1)
         {   
-            resultsFile1 << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
+            arquivoSaida1 << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
             return;
         }
         else
@@ -154,14 +154,14 @@ void updatePosition(double x, double y)
 
 int rotina()
 {
-    resultsFile1.open(resultFile1);
-    resultsFile1 << "Time (s),\n";
+    arquivoSaida1.open(nomeArquivoSaida1);
+    arquivoSaida1 << "Time (s),\n";
 
-    resultsFile2.open(resultFile2);   
-    resultsFile2 << "artery" << "," << "time" << ",\n";
+    arquivoSaida2.open(nomeArquivoSaida2);   
+    arquivoSaida2 << "artery" << "," << "time" << ",\n";
 
-    resultsFile3.open(resultFile3);
-    resultsFile3 << "particle" << "," << "artery" << "," << "time" << ",\n";
+    arquivoSaida3.open(nomeArquivoSaida3);
+    arquivoSaida3 << "particle" << "," << "artery" << "," << "time" << ",\n";
 
     srand(time(NULL));
     #ifdef DEBUG_MODE
@@ -180,44 +180,60 @@ int rotina()
     }
 
 
-    for (int i = 0; i < quantidadeParticulas; i++)
+    for (int particulaAtual = 0, percentualFinalizado = -1; particulaAtual < quantidadeParticulas; particulaAtual++)
     {
         double posXInicial = 0.0;
-        double posYInicial = static_cast<double>(rand()) / (RAND_MAX / (pressaoInicial - 2 * limiteY)) + limiteY;
-        std::cout << "Particula " << i << '/' << quantidadeParticulas <<  ' ' << (double) i / quantidadeParticulas * 100 << '%' << '\n';
+        double posYInicial = static_cast<double>(rand()) / (RAND_MAX / (pressaoInicial - 2. * limiteY)) + limiteY;
+        if(particulaAtual / quantidadeParticulas * 100 > percentualFinalizado)
+        {
+            std::cout << (double) particulaAtual / quantidadeParticulas * 100 << '%' << "..." << '\n';
+            percentualFinalizado = particulaAtual / quantidadeParticulas * 100;
+        }
 
         updatePosition(posXInicial, posYInicial);
 
         if (contadorAbsorvidas == 0 && contadorParticulaIrma == 0)
-            resultsFile3 << i << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";      
+            arquivoSaida3 << particulaAtual << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";      
 
         arteriaAtual = 0;
-        contadorAbsorvidas = 0;
         contadorTempoParticula = 0;
-        contadorParticulaIrma = 0;
     }
+    
 
     std::cout << "Salvando resultados..." << std::endl;
 
-    resultsFile1.close();
-    resultsFile2.close();
-    resultsFile3.close();
+    arquivoSaida1.close();
+    arquivoSaida2.close();
+    arquivoSaida3.close();
 
     return 0;
 }
 
 int main()
 {
-    createFolder("resultados");
-
+    createFolder(nomePastaResultados);
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
         std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
         for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
             std::cout << "SEMANA " << semanaAtual + 1 << '\n';
-        
+
+            /* Setar nomes de arquivos e variaveis antes de chamar a rotina */
+            sprintf("%s/E%d_S%d_particleTime.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1, nomeArquivoSaida1);
+            sprintf("%s/E%d_S%d_first_delay.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1, nomeArquivoSaida2);
+            sprintf("%s/E%d_S%d_received_particles.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1, nomeArquivoSaida3);
+            semana = semanaAtual;
+            quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
+
+            /* Chamar rotina */
+            rotina();
+            std::cout << "Absorvidas: " << contadorAbsorvidas << " Irmas: " << contadorParticulaIrma << '\n';
+            
+            /* Zera variaveis para proxima iteracao */
+            contadorAbsorvidas = 0;
+            contadorParticulaIrma = 0;
+            primeiraASerRecebida = true;
         }
     }
 
-    // rotina();
     return 0;
 }
