@@ -219,15 +219,16 @@ int main()
             std::cout << "SEMANA " << semanaAtual + 1 << '\n';
 
             /* Setar nomes de arquivos e variaveis antes de chamar a rotina */
-            sprintf("%s/E%d_S%d_particleTime.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1, nomeArquivoSaida1);
-            sprintf("%s/E%d_S%d_first_delay.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1, nomeArquivoSaida2);
-            sprintf("%s/E%d_S%d_received_particles.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1, nomeArquivoSaida3);
+            sprintf(nomeArquivoSaida1, "%s/E%d_S%d_particleTime.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1);
+            sprintf(nomeArquivoSaida2, "%s/E%d_S%d_first_delay.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1);
+            sprintf(nomeArquivoSaida3, "%s/E%d_S%d_received_particles.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1);
+            std::cout << nomeArquivoSaida1 << '\n' << nomeArquivoSaida2 << '\n' << nomeArquivoSaida3 << '\n';
             semana = semanaAtual;
             quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
 
             /* Chamar rotina */
             rotina();
-            std::cout << "Absorvidas: " << contadorAbsorvidas << " Irmas: " << contadorParticulaIrma << '\n';
+            std::cout << "Absorvidas: " << contadorAbsorvidas << " Irmas: " << contadorParticulaIrma << '\n' << '\n' << '\n';
             
             /* Zera variaveis para proxima iteracao */
             contadorAbsorvidas = 0;
