@@ -212,17 +212,22 @@ void rotina()
 int main()
 {
     char nomePastaResultados[] = "resultados";
-    createFolder(nomePastaResultados);
+    createFolder(nomePastaResultados, false);
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
         std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
         for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
             std::cout << "SEMANA " << semanaAtual + 1 << '\n';
 
-            /* Setar nomes de arquivos e variaveis antes de chamar a rotina */
-            sprintf(nomeArquivoSaida1, "%s/E%d_S%d_particleTime.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1);
-            sprintf(nomeArquivoSaida2, "%s/E%d_S%d_first_delay.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1);
-            sprintf(nomeArquivoSaida3, "%s/E%d_S%d_received_particles.csv", nomePastaResultados, numEstagio + 1, semanaAtual + 1);
-            std::cout << nomeArquivoSaida1 << '\n' << nomeArquivoSaida2 << '\n' << nomeArquivoSaida3 << '\n';
+            /* Cria pasta com resultados do estagio atual e semana atual */
+            char nomePastaEstagioSemana[30];
+            sprintf(nomePastaEstagioSemana, "E%dS%d", numEstagio + 1, semanaAtual + 1);
+            std::string temp = std::string(nomePastaResultados) + "/" + std::string(nomePastaEstagioSemana);
+            createFolder(temp.c_str(), false);
+            
+            /* Seta nomes de arquivos e variaveis antes de chamar a rotina */
+            sprintf(nomeArquivoSaida1, "%s/%s/E%d_S%d_particleTime.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
+            sprintf(nomeArquivoSaida2, "%s/%s/E%d_S%d_first_delay.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
+            sprintf(nomeArquivoSaida3, "%s/%s/E%d_S%d_received_particles.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
             semana = semanaAtual;
             quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
 
