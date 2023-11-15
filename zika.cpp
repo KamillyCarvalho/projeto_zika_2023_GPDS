@@ -40,9 +40,9 @@ const double passoY = 1e-3;
 // const std::vector<int> estagio1 = {6558050, 7906264, 8655256, 8899930};
 // const std::vector<int> estagio2 = {13201581, 36097470, 53530880, 43530297};
 // const std::vector<int> estagio3 = {2627406, 7205390, 10647480, 8617887};
-const std::vector<int> estagio1 = {100000, 100000, 100000, 100000};
-const std::vector<int> estagio2 = {100000, 100000, 100000, 100000};
-const std::vector<int> estagio3 = {100000, 100000, 100000, 100000};
+const std::vector<int> estagio1 = {1000000, 1, 1, 1};
+const std::vector<int> estagio2 = {1, 1, 1, 1};
+const std::vector<int> estagio3 = {1, 1, 1, 1};
 const std::vector<std::vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
 
 
@@ -128,11 +128,11 @@ void updatePosition(double x, double y)
         if (primeiraASerRecebida)
         {
             arquivoSaida2 << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
-            primeiraASerRecebida = false;
         }
         if (arteriaAtual == NUM_ARTERIAS - 1)
         {   
             arquivoSaida1 << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
+            primeiraASerRecebida = false;
             return;
         }
         else
