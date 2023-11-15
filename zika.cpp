@@ -44,7 +44,7 @@ const std::vector<int> estagio1 = {100000, 100000, 100000, 100000};
 const std::vector<int> estagio2 = {100000, 100000, 100000, 100000};
 const std::vector<int> estagio3 = {100000, 100000, 100000, 100000};
 const std::vector<std::vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
-const char *nomePastaResultados = "resultados";
+
 
 /* Geradores de numeros aleatorios */
 std::default_random_engine geradorDistNormal;
@@ -65,9 +65,9 @@ bool primeiraASerRecebida = true;
 std::vector<double> perfilVelocidade[NUM_ARTERIAS];
 
 /* Variaveis para arquivos de saida */
-char* nomeArquivoSaida1 = "resultados/N0_S0_particleTime.csv";
-char* nomeArquivoSaida2 = "resultados/N0_S0_first_delay.csv";    
-char* nomeArquivoSaida3 = "resultados/N0_S0_received_particles.csv";
+char nomeArquivoSaida1[255];
+char nomeArquivoSaida2[255];
+char nomeArquivoSaida3[255];
 std::ofstream arquivoSaida1;
 std::ofstream arquivoSaida2;  
 std::ofstream arquivoSaida3;
@@ -152,7 +152,7 @@ void updatePosition(double x, double y)
 }
 
 
-int rotina()
+void rotina()
 {
     arquivoSaida1.open(nomeArquivoSaida1);
     arquivoSaida1 << "Time (s),\n";
@@ -206,11 +206,12 @@ int rotina()
     arquivoSaida2.close();
     arquivoSaida3.close();
 
-    return 0;
+    return;
 }
 
 int main()
 {
+    char nomePastaResultados[] = "resultados";
     createFolder(nomePastaResultados);
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
         std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
