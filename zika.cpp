@@ -10,7 +10,7 @@
 
 // #define DEBUG_MODE // comentar esta linha caso nao esteja em modo debug
 #ifdef DEBUG_MODE
-    #define RANDOM_SEED_CONSTANT 20
+    #define RANDOM_SEED_CONSTANT 42
 #endif
 
 using namespace std;
