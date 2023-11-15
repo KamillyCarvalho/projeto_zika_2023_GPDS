@@ -8,6 +8,11 @@
 #include <iostream> // funcoes para saida
 #include <fstream> // funcoes para manipulacao de arquivos
 
+// #define DEBUG_MODE // comentar esta linha caso nao esteja em modo debug
+#ifdef DEBUG_MODE
+    #define RANDOM_SEED_CONSTANT 20
+#endif
+
 using namespace std;
 
 /* Parâmetros Iniciais - Início */
@@ -102,7 +107,11 @@ void updatePosition(double x, double y)
         forca = 1;
     else
     {
-        srand(time(NULL)); 
+        srand(time(NULL));
+        #ifdef DEBUG_MODE
+            srand(RANDOM_SEED_CONSTANT);
+        #endif
+
         if (rand() % 2 == 1) forca = -1;
         else forca = 1;
     }
@@ -181,6 +190,10 @@ int routine()
     resultsFile3 << "particle" << "," << "artery" << "," << "time" << ",\n";
 
     srand(time(NULL));
+    #ifdef DEBUG_MODE
+        srand(RANDOM_SEED_CONSTANT);
+    #endif
+
 
     float initialX = 0.0;
     float initialY = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (pressaoInicial - 2 * limiteY))) + limiteY;
