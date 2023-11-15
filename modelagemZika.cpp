@@ -32,3 +32,20 @@ bool atendeCriterioParadaX(const double totalD[], const double comprimentoArteri
 bool atendeCriterioAbsorcaoReflexao(const double resistenciaVascular[], const int rota[], const int arteriaAtual, double posAtualY){
     return posAtualY >= 2 * resistenciaVascular[rota[arteriaAtual]] or posAtualY <= 0;
 }
+
+
+void createFolder(const char* folderName)
+{
+    struct stat st;
+    if (stat(folderName, &st) == 0)
+    {
+        // Se o diretório já existe, remove-o
+        std::string command = "rm -rf " + std::string(folderName);
+        system(command.c_str());
+    }
+    int status = mkdir(folderName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    if (status == 0) 
+        printf("%s folder created\n", folderName);
+    else 
+        printf("Error creating %s folder\n", folderName);
+}
