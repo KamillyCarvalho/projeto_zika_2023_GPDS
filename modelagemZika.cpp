@@ -44,9 +44,9 @@ void createFolder(const char* folderName){
     }
     int status = mkdir(folderName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     if (status == 0) 
-        printf("%s folder created\n", folderName);
+        printf("\"%s\" folder created\n", folderName);
     else 
-        printf("Error creating %s folder\n", folderName);
+        printf("Error creating \"%s\" folder\n", folderName);
 }
 
 double calculaPerfilVelocidadePonto(double resistenciaVenosa, double passoY, double pressaoHemodinamica, int pontoAtual){
