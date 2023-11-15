@@ -60,11 +60,11 @@ int arteriaAtual = 0;
 int contadorAbsorvidas = 0;
 int contadorTempoParticula = 0;
 int contadorParticulaIrma = 0;
-double pressaoHemodinamica = 0.0;
 bool primeiraASerRecebida = true;
+double pressaoHemodinamica = 0.0;
 std::vector<double> perfilVelocidade[NUM_ARTERIAS];
 
-/* Variaveis para arquivos de saida */
+/* Variaveis GLOBAIS para arquivos de saida */
 char nomeArquivoSaida1[255];
 char nomeArquivoSaida2[255];
 char nomeArquivoSaida3[255];
@@ -73,7 +73,10 @@ std::ofstream arquivoSaida2;
 std::ofstream arquivoSaida3;
 
 
-
+/*  Função principal do código.
+    È recursiva e atualiza a posição da partícula a cada iteração.
+    Também faz algumas checagens de absorção ou reflexão. 
+*/
 void updatePosition(double x, double y)
 {
     int indiceY = (int) (y * 1000); // indice do perfil de velocidade baseado na posicao de y
@@ -97,14 +100,13 @@ void updatePosition(double x, double y)
     
     double deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[semana][arteriaAtual], perfilVelocidadeArteriaAtual[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
     double deltaY = calcularDeslocamentoVertical(forca, pressaoVenosa, INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
-
-    x = x + deltaX;
-    y = y + deltaY;
-    /* Fim do calculo da posicao */
-
+    
+    x = x + deltaX; // atualiza posicao x
+    y = y + deltaY; // atualiza posicao x
+   
     contadorTempoParticula++;
     
-    /* Inicio determinacao se Absorcao ou Reflexao */
+    /* Determinacao se Absorcao ou Reflexao */
     if (atendeCriterioAbsorcaoReflexao(resistenciaVascular, rota, arteriaAtual, y))
     {
         int ehReflexao = distribuicaoAbsorcaoReflexao(geradorAbsorcaoReflexao);
@@ -119,7 +121,6 @@ void updatePosition(double x, double y)
             return;
         }
     }
-    /* Fim determinacao se Absorcao ou Reflexao */
 
     /* Artéria e Critério de Parada */
     if (atendeCriterioParadaX(totalD, comprimentoArteria, rota, arteriaAtual, x))
@@ -145,8 +146,7 @@ void updatePosition(double x, double y)
             }
         }
     }
-    updatePosition(x, y);
-    /* Fim da Artéria e Critério de Parada - Fim*/
+    updatePosition(x, y); // proxima posicao
 
     return;
 }
