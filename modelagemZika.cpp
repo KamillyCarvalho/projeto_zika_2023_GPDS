@@ -1,6 +1,6 @@
 #include "modelagemZika.h"
 
-double calcularDeslocamentoHorizontal(double pressaoHemodinamica, double velocidadeInicial, double incrementoTempo, double coeficienteDifusao, double incrementoWiener){
+double calcularDeslocamentoHorizontal(double elasticidadeParede, double velocidadeInicial, double incrementoTempo, double coeficienteDifusao, double incrementoWiener){
     /*
         É influenciado pela pressão hemodinâmica,
         velocidade inicial -> (firstSpeedPointer[indiceY]),
@@ -8,7 +8,7 @@ double calcularDeslocamentoHorizontal(double pressaoHemodinamica, double velocid
         O movimento é proporcional à pressão hemodinâmica e à velocidade da partícula, e inclui uma componente aleatória modelada pela distribuição de Wiener.
     */
 
-    return pressaoHemodinamica * velocidadeInicial * incrementoTempo + sqrt(2 * coeficienteDifusao) * incrementoWiener;
+    return elasticidadeParede * velocidadeInicial * incrementoTempo + sqrt(2 * coeficienteDifusao) * incrementoWiener;
 }
 
 double calcularDeslocamentoVertical(int forca, double pressaoVenosa, double incrementoTempo, double coeficienteDifusao, double incrementoWiener){
@@ -49,7 +49,7 @@ void createFolder(const char* folderName){
         printf("Error creating %s folder\n", folderName);
 }
 
-double calculaPerfilVelociadaPonto(double resistenciaVenosa, double passoY, double pressaoHemodinamica, int pontoAtual){
+double calculaPerfilVelocidadePonto(double resistenciaVenosa, double passoY, double pressaoHemodinamica, int pontoAtual){
     const double razaoPassoPressao = passoY / pressaoHemodinamica;
     const double coeficienteVelocidade = 12 / (1.4 * resistenciaVenosa);
     const double alfa = 1 - exp(-resistenciaVenosa * pontoAtual * razaoPassoPressao);
