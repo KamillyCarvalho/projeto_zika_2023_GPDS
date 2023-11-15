@@ -13,8 +13,6 @@
     #define RANDOM_SEED_CONSTANT 42
 #endif
 
-using namespace std;
-
 /* Constantes utilizadas na simulacao */
 
 const int NUM_ARTERIAS = 13;
@@ -39,40 +37,38 @@ const double fracaoRefletida = 1 - fracaoAbsorvida;
 const double limiteY = 1e-3;
 const double passoY = 1e-3;
 
-const vector<int> estagio1 = {6558050, 7906264, 8655256, 8899930};
-const vector<int> estagio2 = {13201581, 36097470, 53530880, 43530297};
-const vector<int> estagio3 = {2627406, 7205390, 10647480, 8617887};
-const vector<vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
+const std::vector<int> estagio1 = {6558050, 7906264, 8655256, 8899930};
+const std::vector<int> estagio2 = {13201581, 36097470, 53530880, 43530297};
+const std::vector<int> estagio3 = {2627406, 7205390, 10647480, 8617887};
+const std::vector<std::vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
 
 /* Geradores de numeros aleatorios */
-default_random_engine geradorDistNormal;
-normal_distribution<double> distribuicaoNormal(0, sqrt(INCREMENTO_TEMPO));
+std::default_random_engine geradorDistNormal;
+std::normal_distribution<double> distribuicaoNormal(0, sqrt(INCREMENTO_TEMPO));
 
-default_random_engine geradorAbsorcaoReflexao;
-discrete_distribution<int> distribuicaoAbsorcaoReflexao(fracaoAbsorvida, fracaoRefletida);
+std::default_random_engine geradorAbsorcaoReflexao;
+std::discrete_distribution<int> distribuicaoAbsorcaoReflexao(fracaoAbsorvida, fracaoRefletida);
 
 /* Variaveis utilizadas na simulacao */
 int semana = 0;
 int quantidadeParticulas = 1000000;
 int particulaAtual = 0;
-double pressaoHemodinamica = 0.0;
-bool primeiraASerRecebida = false;
 int arteriaAtual = 0;
-vector<double> perfilVelocidade[NUM_ARTERIAS];
-
-
-
-const string resultFile1 = "resultados/N0_S0_particleTime.csv";
-const string resultFile2 = "resultados/N0_S0_first_delay.csv";    
-const string resultFile3 = "resultados/N0_S0_received_particles.csv";
-
-ofstream resultsFile1;
-ofstream resultsFile2;  
-ofstream resultsFile3;
-
 int contadorAbsorvidas = 0;
 int contadorTempoParticula = 0;
 int contadorParticulaIrma = 0;
+double pressaoHemodinamica = 0.0;
+bool primeiraASerRecebida = false;
+std::vector<double> perfilVelocidade[NUM_ARTERIAS];
+
+/* Arquivos de saida */
+const std::string resultFile1 = "resultados/N0_S0_particleTime.csv";
+const std::string resultFile2 = "resultados/N0_S0_first_delay.csv";    
+const std::string resultFile3 = "resultados/N0_S0_received_particles.csv";
+
+std::ofstream resultsFile1;
+std::ofstream resultsFile2;  
+std::ofstream resultsFile3;
 
 
 void updatePosition(double x, double y)
@@ -162,9 +158,8 @@ void updatePosition(double x, double y)
 }
 
 
-int routine()
+int rotina()
 {
-    cout << "ROTINA\n";
     resultsFile1.open(resultFile1);
     resultsFile1 << "Time (s),\n";
 
@@ -183,11 +178,8 @@ int routine()
     float initialX = 0.0;
     float initialY = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (pressaoInicial - 2 * limiteY))) + limiteY;
 
-    cout << "Número de artérias = " << NUM_ARTERIAS << '\n';
-
     for (int i = 0; i < NUM_ARTERIAS; i++)
     {
-        cout << "Artéria " << i << '\n';
         pressaoHemodinamica = 2 * resistenciaVascular[rota[i]];
 
         for (int j = 0; j < static_cast<int>((pressaoHemodinamica + passoY) / passoY); j++)
@@ -199,14 +191,12 @@ int routine()
 
     for (int i = 0; i < quantidadeParticulas; i++)
     {
-        cout << "Partícula " << i << '/' << quantidadeParticulas <<  ' ' << (double) i / quantidadeParticulas * 100 << '%' << '\n';
+        std::cout << "Partícula " << i << '/' << quantidadeParticulas <<  ' ' << (double) i / quantidadeParticulas * 100 << '%' << '\n';
 
         updatePosition(initialX, initialY);
 
         if (contadorAbsorvidas == 0 && contadorParticulaIrma == 0)
-        {
-            resultsFile3 << i << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
-        }      
+            resultsFile3 << i << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";      
 
         particulaAtual++;
         initialX = 0.0;
@@ -218,7 +208,7 @@ int routine()
         contadorParticulaIrma = 0;
     }
 
-    cout << "Salvando resultados..." << endl;
+    std::cout << "Salvando resultados..." << std::endl;
 
     resultsFile1.close();
     resultsFile2.close();
@@ -230,6 +220,15 @@ int routine()
 int main()
 {
     createFolder("resultados");
-    routine();
+
+    for(int numEstagio = 0; numEstagio < (int)ESTAGIOS.size(); numEstagio++){
+        std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
+        for(int semanaAtual = 0; semanaAtual < (int)ESTAGIOS[numEstagio].size(); semanaAtual++){
+            std::cout << "SEMANA " << semanaAtual + 1 << '\n';
+        
+        }
+    }
+
+    // rotina();
     return 0;
 }
