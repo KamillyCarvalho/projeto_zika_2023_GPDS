@@ -52,13 +52,12 @@ std::discrete_distribution<int> distribuicaoAbsorcaoReflexao(fracaoAbsorvida, fr
 /* Variaveis GLOBAIS utilizadas na simulacao */
 int semana = 0;
 int quantidadeParticulas = 1000000;
-int particulaAtual = 0;
 int arteriaAtual = 0;
 int contadorAbsorvidas = 0;
 int contadorTempoParticula = 0;
 int contadorParticulaIrma = 0;
 double pressaoHemodinamica = 0.0;
-bool primeiraASerRecebida = false;
+bool primeiraASerRecebida = true;
 std::vector<double> perfilVelocidade[NUM_ARTERIAS];
 
 /* Arquivos de saida */
@@ -81,8 +80,8 @@ void updatePosition(double x, double y)
     double* perfilVelocidadeArteriaAtual = perfilVelocidade[arteriaAtual].data();   
 
     /* Calculando a posicao */
-    
     deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[semana][arteriaAtual], perfilVelocidadeArteriaAtual[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
+    
     int forca = 0;
     if (y > resistenciaVascular[rota[arteriaAtual]] or y < resistenciaVascular[rota[arteriaAtual]])
         forca = 1;
@@ -101,7 +100,6 @@ void updatePosition(double x, double y)
 
     x = x + deltaX;
     y = y + deltaY;
-    
     /* Fim do calculo da posicao */
 
     contadorTempoParticula++;
@@ -126,29 +124,25 @@ void updatePosition(double x, double y)
     /* Artéria e Critério de Parada */
     if (atendeCriterioParadaX(totalD, comprimentoArteria, rota, arteriaAtual, x))
     {
-        if (!primeiraASerRecebida)
+        if (primeiraASerRecebida)
         {
             resultsFile2 << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
+            primeiraASerRecebida = false;
         }
         if (arteriaAtual == NUM_ARTERIAS - 1)
         {   
             resultsFile1 << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
-            primeiraASerRecebida = true;
-
             return;
         }
         else
         {
             arteriaAtual++;
-
-            /* Artéria irmã - Início */
+            /* Artéria irmã */
             if (atendeCriterioParadaY(resistenciaVascular, rota, arteriaAtual, y))
             {
                 contadorParticulaIrma++;
-
                 return;
             }
-            /* Artéria irmã - Fim */
         }
     }
     updatePosition(x, y);
@@ -174,10 +168,6 @@ int rotina()
         srand(RANDOM_SEED_CONSTANT);
     #endif
 
-
-    double initialX = 0.0;
-    double initialY = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (pressaoInicial - 2 * limiteY))) + limiteY;
-
     for (int i = 0; i < NUM_ARTERIAS; i++)
     {
         pressaoHemodinamica = 2 * resistenciaVascular[rota[i]];
@@ -189,18 +179,17 @@ int rotina()
         }
     }
 
+
     for (int i = 0; i < quantidadeParticulas; i++)
     {
-        std::cout << "Partícula " << i << '/' << quantidadeParticulas <<  ' ' << (double) i / quantidadeParticulas * 100 << '%' << '\n';
+        double posXInicial = 0.0;
+        double posYInicial = static_cast<double>(rand()) / (RAND_MAX / (pressaoInicial - 2 * limiteY)) + limiteY;
+        std::cout << "Particula " << i << '/' << quantidadeParticulas <<  ' ' << (double) i / quantidadeParticulas * 100 << '%' << '\n';
 
-        updatePosition(initialX, initialY);
+        updatePosition(posXInicial, posYInicial);
 
         if (contadorAbsorvidas == 0 && contadorParticulaIrma == 0)
             resultsFile3 << i << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";      
-
-        particulaAtual++;
-        initialX = 0.0;
-        initialY = static_cast<double>(rand()) / (static_cast<double>(RAND_MAX / (pressaoInicial - 2 * limiteY))) + limiteY;
 
         arteriaAtual = 0;
         contadorAbsorvidas = 0;
