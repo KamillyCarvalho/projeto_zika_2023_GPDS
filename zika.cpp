@@ -15,11 +15,9 @@
 
 using namespace std;
 
-/* Parâmetros Iniciais - Início */
+/* Constantes utilizadas na simulacao */
 
 const int NUM_ARTERIAS = 13;
-int arteriaAtual = 0;
-
 const double comprimentoArteria[] = {1, 10, 3, 3, 3.5, 3.5, 16.75, 13.5, 39.75, 22, 22.25, 4, 19.25, 5.5, 10.5, 7.25, 3.5, 13.5, 39.75, 22.25, 22, 2, 2, 6.5, 5.75, 5.5, 5.25, 5, 1.5, 3, 1.5, 3, 12.5, 3.75, 8, 5.75, 14.5, 4.5, 11.25, 44.25};
 const double resistenciaVascular[] = {1.502, 0.3, 1.42, 1.342, 0.7, 0.407, 0.4, 0.2, 0.25, 0.175, 0.175, 1.246, 0.4, 1.124, 0.924, 0.5, 0.407, 0.2, 0.25, 0.175, 0.175, 0.3, 0.25, 0.25, 0.15, 0.2, 0.838, 0.35, 0.814, 0.275, 0.792, 0.275, 0.627, 0.175, 0.55, 0.37, 0.314, 0.2, 0.2, 0.2};
 const double totalD[] = {0, 1, 4, 7, 11, 16.5, 27, 32.25, 33.75, 35.25, 47.75, 55.75, 61.5};
@@ -29,14 +27,10 @@ const double elasticidadeParede[4][13] = {
     {3.69878565, 3.64307815, 3.8862281 , 4.00476166, 4.67167833, 5.04437305, 5.13396467, 4.14835062, 3.56917331, 4.34186109, 4.9445025 , 5.61936806, 8.85432724},
     {3.80334596, 3.74537948, 3.99331575, 4.11346024, 4.79770086, 5.17621006, 5.26625837, 4.25338507, 3.65858461, 4.44940732, 5.0664316 , 5.75579298, 9.06732555}
 };
-
-const int arteriaPai[] = {-1, 0, 0, 2, 2, 4, 4, 5, 5, 8, 8, 3, 3, 11, 13, 13, 11, 16, 16, 18, 18, 14, 21, 21, 22, 22, 14, 26, 26, 28, 28, 30, 30, 32, 32, 34, 35, 35, 36, 36};
-const int arteriaIrmao[] = {-1, 2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11, 16, 15, 14, 13, 18, 17, 20, 19, 26, 23, 22, 25, 24, 21, 28, 27, 30, 29, 32, 31, 34, 33, 35, 37, 36, 39, 38};
 const int rota[] = {0, 2, 3, 11, 13, 14, 26, 28, 30, 32, 34, 35, 37};
 
 const double INCREMENTO_TEMPO = 1e-1;
 const double coeficienteDifusao = 1e-2;
-double pressaoHemodinamica = 0.0;
 const double pressaoInicial = 2 * resistenciaVascular[0];
 const double pressaoVenosa = 1e-2;
 const double resistenciaVenosa = 1.0;
@@ -45,31 +39,28 @@ const double fracaoRefletida = 1 - fracaoAbsorvida;
 const double limiteY = 1e-3;
 const double passoY = 1e-3;
 
-vector<double> perfilVelocidade[NUM_ARTERIAS];
+const vector<int> estagio1 = {6558050, 7906264, 8655256, 8899930};
+const vector<int> estagio2 = {13201581, 36097470, 53530880, 43530297};
+const vector<int> estagio3 = {2627406, 7205390, 10647480, 8617887};
+const vector<vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
 
+/* Geradores de numeros aleatorios */
 default_random_engine geradorDistNormal;
 normal_distribution<double> distribuicaoNormal(0, sqrt(INCREMENTO_TEMPO));
 
 default_random_engine geradorAbsorcaoReflexao;
 discrete_distribution<int> distribuicaoAbsorcaoReflexao(fracaoAbsorvida, fracaoRefletida);
 
-int weeks = 0;
-long int totalParticles = 1000000;
-int currentParticle = 0;
+/* Variaveis utilizadas na simulacao */
+int semana = 0;
+int quantidadeParticulas = 1000000;
+int particulaAtual = 0;
+double pressaoHemodinamica = 0.0;
+bool primeiraASerRecebida = false;
+int arteriaAtual = 0;
+vector<double> perfilVelocidade[NUM_ARTERIAS];
 
-bool isFirstReceived = false;
 
-const vector<int> estagio1 = {6558050, 7906264, 8655256, 8899930};
-const vector<int> estagio2 = {13201581, 36097470, 53530880, 43530297};
-const vector<int> estagio3 = {2627406, 7205390, 10647480, 8617887};
-
-const vector<vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
-
-const string folder1 = "particle_time";
-const string folder2 = "first_delay";
-const string folder3 = "received_particles";
-
-const vector<string> folderNames = {folder1, folder2, folder3};
 
 const string resultFile1 = "resultados/N0_S0_particleTime.csv";
 const string resultFile2 = "resultados/N0_S0_first_delay.csv";    
@@ -79,14 +70,9 @@ ofstream resultsFile1;
 ofstream resultsFile2;  
 ofstream resultsFile3;
 
-vector<double> particleTimes(totalParticles, 0);
-
 int contadorAbsorvidas = 0;
 int contadorTempoParticula = 0;
 int contadorParticulaIrma = 0;
-
-/* Parâmetros Iniciais - Fim */
-
 
 
 void updatePosition(double x, double y)
@@ -100,7 +86,7 @@ void updatePosition(double x, double y)
 
     /* Calculando a posicao */
     
-    deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[weeks][arteriaAtual], firstSpeedPointer[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
+    deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[semana][arteriaAtual], firstSpeedPointer[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
     int forca = 0;
     if (y > resistenciaVascular[rota[arteriaAtual]] or y < resistenciaVascular[rota[arteriaAtual]])
         forca = 1;
@@ -144,14 +130,14 @@ void updatePosition(double x, double y)
     /* Artéria e Critério de Parada */
     if (atendeCriterioParadaX(totalD, comprimentoArteria, rota, arteriaAtual, x))
     {
-        if (!isFirstReceived)
+        if (!primeiraASerRecebida)
         {
             resultsFile2 << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
         }
         if (arteriaAtual == NUM_ARTERIAS - 1)
         {   
             resultsFile1 << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
-            isFirstReceived = true;
+            primeiraASerRecebida = true;
 
             return;
         }
@@ -211,9 +197,9 @@ int routine()
         }
     }
 
-    for (int i = 0; i < totalParticles; i++)
+    for (int i = 0; i < quantidadeParticulas; i++)
     {
-        cout << "Partícula " << i << '/' << totalParticles <<  ' ' << (double) i / totalParticles * 100 << '%' << '\n';
+        cout << "Partícula " << i << '/' << quantidadeParticulas <<  ' ' << (double) i / quantidadeParticulas * 100 << '%' << '\n';
 
         updatePosition(initialX, initialY);
 
@@ -222,7 +208,7 @@ int routine()
             resultsFile3 << i << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
         }      
 
-        currentParticle++;
+        particulaAtual++;
         initialX = 0.0;
         initialY = static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (pressaoInicial - 2 * limiteY))) + limiteY;
 
