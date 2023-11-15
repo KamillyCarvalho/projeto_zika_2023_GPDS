@@ -95,7 +95,7 @@ void updatePosition(double x, double y)
 
     /* Calculando a posicao */
     
-    deltaX = pressaoHemodinamica * firstSpeedPointer[indiceY] * INCREMENTO_TEMPO + sqrt(2 * coeficienteDifusao) * incrementoWiener;
+    deltaX = elasticidadeParede[weeks][arteriaAtual] * firstSpeedPointer[indiceY] * INCREMENTO_TEMPO + sqrt(2 * coeficienteDifusao) * incrementoWiener;
  
     int forca = 0;
     if (y > resistenciaVascular[rota[arteriaAtual]] or y < resistenciaVascular[rota[arteriaAtual]])
