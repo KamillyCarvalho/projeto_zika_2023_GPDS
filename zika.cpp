@@ -100,8 +100,7 @@ void updatePosition(double x, double y)
 
     /* Calculando a posicao */
     
-    deltaX = elasticidadeParede[weeks][arteriaAtual] * firstSpeedPointer[indiceY] * INCREMENTO_TEMPO + sqrt(2 * coeficienteDifusao) * incrementoWiener;
- 
+    deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[weeks][arteriaAtual], firstSpeedPointer[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
     int forca = 0;
     if (y > resistenciaVascular[rota[arteriaAtual]] or y < resistenciaVascular[rota[arteriaAtual]])
         forca = 1;
@@ -115,8 +114,8 @@ void updatePosition(double x, double y)
         if (rand() % 2 == 1) forca = -1;
         else forca = 1;
     }
-
-    deltaY = forca * pressaoVenosa * INCREMENTO_TEMPO + sqrt(2 * coeficienteDifusao) * incrementoWiener;
+    
+    deltaY = calcularDeslocamentoVertical(forca, pressaoVenosa, INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
 
     x = x + deltaX;
     y = y + deltaY;
@@ -126,7 +125,7 @@ void updatePosition(double x, double y)
     contadorTempoParticula++;
     
     /* Inicio determinacao se Absorcao ou Reflexao */
-    if (y >= 2 * resistenciaVascular[rota[arteriaAtual]] or y <= 0)
+    if (atendeCriterioAbsorcaoReflexao(resistenciaVascular, rota, arteriaAtual, y))
     {
         int ehReflexao = distribuicaoAbsorcaoReflexao(geradorAbsorcaoReflexao);
 
@@ -143,7 +142,7 @@ void updatePosition(double x, double y)
     /* Fim determinacao se Absorcao ou Reflexao */
 
     /* Artéria e Critério de Parada */
-    if (x >= totalD[arteriaAtual] + comprimentoArteria[rota[arteriaAtual]])
+    if (atendeCriterioParadaX(totalD, comprimentoArteria, rota, arteriaAtual, x))
     {
         if (!isFirstReceived)
         {
@@ -161,7 +160,7 @@ void updatePosition(double x, double y)
             arteriaAtual++;
 
             /* Artéria irmã - Início */
-            if (y >= 2 * resistenciaVascular[rota[arteriaAtual]])
+            if (atendeCriterioParadaY(resistenciaVascular, rota, arteriaAtual, y))
             {
                 contadorParticulaIrma++;
 
@@ -207,7 +206,8 @@ int routine()
 
         for (int j = 0; j < static_cast<int>((pressaoHemodinamica + passoY) / passoY); j++)
         {
-            perfilVelocidade[i].push_back((12 / (1.4 * resistenciaVenosa)) * (-(j * passoY / pressaoHemodinamica) + (1 - exp(-resistenciaVenosa * (j * passoY / pressaoHemodinamica))) / (1 - exp(-resistenciaVenosa))));
+            double velocidadePontoAtual = calculaPerfilVelociadaPonto(resistenciaVenosa, passoY, pressaoHemodinamica, j);
+            perfilVelocidade[i].push_back(velocidadePontoAtual);
         }
     }
 
