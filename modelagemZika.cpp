@@ -34,8 +34,7 @@ bool atendeCriterioAbsorcaoReflexao(const double resistenciaVascular[], const in
 }
 
 
-void createFolder(const char* folderName)
-{
+void createFolder(const char* folderName){
     struct stat st;
     if (stat(folderName, &st) == 0)
     {
