@@ -206,7 +206,7 @@ int routine()
 
         for (int j = 0; j < static_cast<int>((pressaoHemodinamica + passoY) / passoY); j++)
         {
-            double velocidadePontoAtual = calculaPerfilVelociadaPonto(resistenciaVenosa, passoY, pressaoHemodinamica, j);
+            double velocidadePontoAtual = calculaPerfilVelocidadePonto(resistenciaVenosa, passoY, pressaoHemodinamica, j);
             perfilVelocidade[i].push_back(velocidadePontoAtual);
         }
     }
