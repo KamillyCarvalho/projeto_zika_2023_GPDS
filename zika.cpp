@@ -4,14 +4,9 @@
     A função updatePosition é responsável por calcular como cada partícula se move ao longo do tempo devido a diferentes forças e influências.
 */
 
-#include <iostream>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <vector>
-#include <random>
-#include <fstream>
-#include <sys/stat.h>
+#include "modelagemZika.h" // funcoes utilizadas na modelagem
+#include <iostream> // funcoes para saida
+#include <fstream> // funcoes para manipulacao de arquivos
 
 using namespace std;
 
