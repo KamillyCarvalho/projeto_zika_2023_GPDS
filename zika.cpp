@@ -49,7 +49,7 @@ std::normal_distribution<double> distribuicaoNormal(0, sqrt(INCREMENTO_TEMPO));
 std::default_random_engine geradorAbsorcaoReflexao;
 std::discrete_distribution<int> distribuicaoAbsorcaoReflexao(fracaoAbsorvida, fracaoRefletida);
 
-/* Variaveis utilizadas na simulacao */
+/* Variaveis GLOBAIS utilizadas na simulacao */
 int semana = 0;
 int quantidadeParticulas = 1000000;
 int particulaAtual = 0;
@@ -78,11 +78,11 @@ void updatePosition(double x, double y)
     double deltaX = 0; // deslocamento horizontal
     double deltaY = 0; // deslocamento vertical
     double incrementoWiener = distribuicaoNormal(geradorDistNormal);
-    double* firstSpeedPointer = perfilVelocidade[arteriaAtual].data();   
+    double* perfilVelocidadeArteriaAtual = perfilVelocidade[arteriaAtual].data();   
 
     /* Calculando a posicao */
     
-    deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[semana][arteriaAtual], firstSpeedPointer[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
+    deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[semana][arteriaAtual], perfilVelocidadeArteriaAtual[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
     int forca = 0;
     if (y > resistenciaVascular[rota[arteriaAtual]] or y < resistenciaVascular[rota[arteriaAtual]])
         forca = 1;
