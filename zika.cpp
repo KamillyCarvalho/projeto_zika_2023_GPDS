@@ -8,13 +8,19 @@
 #include <iostream> // funcoes para saida
 #include <fstream> // funcoes para manipulacao de arquivos
 
-// #define DEBUG_MODE // comentar esta linha caso NAO esteja em modo debug
+/*
+Define para DEBUG MODE
+Manter a linha abaixo comentada para funcionamento normal
+Descomentar para definir o modo DEBUG
+*/
+
+// #define DEBUG_MODE
+
 #ifdef DEBUG_MODE
     #define RANDOM_SEED_CONSTANT 42
 #endif
 
 /* Constantes utilizadas na simulacao */
-
 const int NUM_ARTERIAS = 13;
 const double comprimentoArteria[] = {1, 10, 3, 3, 3.5, 3.5, 16.75, 13.5, 39.75, 22, 22.25, 4, 19.25, 5.5, 10.5, 7.25, 3.5, 13.5, 39.75, 22.25, 22, 2, 2, 6.5, 5.75, 5.5, 5.25, 5, 1.5, 3, 1.5, 3, 12.5, 3.75, 8, 5.75, 14.5, 4.5, 11.25, 44.25};
 const double resistenciaVascular[] = {1.502, 0.3, 1.42, 1.342, 0.7, 0.407, 0.4, 0.2, 0.25, 0.175, 0.175, 1.246, 0.4, 1.124, 0.924, 0.5, 0.407, 0.2, 0.25, 0.175, 0.175, 0.3, 0.25, 0.25, 0.15, 0.2, 0.838, 0.35, 0.814, 0.275, 0.792, 0.275, 0.627, 0.175, 0.55, 0.37, 0.314, 0.2, 0.2, 0.2};
@@ -37,14 +43,10 @@ const double fracaoRefletida = 1 - fracaoAbsorvida;
 const double limiteY = 1e-3;
 const double passoY = 1e-3;
 
-// const std::vector<int> estagio1 = {6558050, 7906264, 8655256, 8899930};
-// const std::vector<int> estagio2 = {13201581, 36097470, 53530880, 43530297};
-// const std::vector<int> estagio3 = {2627406, 7205390, 10647480, 8617887};
-const std::vector<int> estagio1 = {100'000, 1, 1, 1};
-const std::vector<int> estagio2 = {1, 1, 1, 1};
-const std::vector<int> estagio3 = {1, 1, 1, 1};
+const std::vector<int> estagio1 = {6558050, 7906264, 8655256, 8899930};
+const std::vector<int> estagio2 = {13201581, 36097470, 53530880, 43530297};
+const std::vector<int> estagio3 = {2627406, 7205390, 10647480, 8617887};
 const std::vector<std::vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
-
 
 /* Geradores de numeros aleatorios */
 std::default_random_engine geradorDistNormal;
@@ -73,9 +75,10 @@ std::ofstream arquivoSaida2;
 std::ofstream arquivoSaida3;
 
 
-/*  Função principal do código.
-    È recursiva e atualiza a posição da partícula a cada iteração.
-    Também faz algumas checagens de absorção ou reflexão. 
+/*  
+    Função principal do codigo.
+    Recursiva e atualiza a posicao da particula a cada chamada.
+    Também faz algumas checagens de absorcao ou reflexao. 
 */
 void updatePosition(double x, double y)
 {
@@ -122,7 +125,7 @@ void updatePosition(double x, double y)
         }
     }
 
-    /* Artéria e Critério de Parada */
+    /* Arteria e Criterio de Parada */
     if (atendeCriterioParadaX(totalD, comprimentoArteria, rota, arteriaAtual, x))
     {
         if (primeiraASerRecebida)
@@ -138,7 +141,7 @@ void updatePosition(double x, double y)
         else
         {
             arteriaAtual++;
-            /* Artéria irmã */
+            /* Arteria irma */
             if (atendeCriterioParadaY(resistenciaVascular, rota, arteriaAtual, y))
             {
                 contadorParticulaIrma++;
@@ -182,12 +185,18 @@ void rotina()
 
     for (int particulaAtual = 0, percentualFinalizado = -1; particulaAtual < quantidadeParticulas; particulaAtual++)
     {
+        /* Reset variaveis relacionadas a particula atual */
+        arteriaAtual = 0;
+        contadorTempoParticula = 0;
+        contadorAbsorvidas = 0;
+        contadorParticulaIrma = 0;
         double posXInicial = 0.0;
         double posYInicial = static_cast<double>(rand()) / (RAND_MAX / (pressaoInicial - 2. * limiteY)) + limiteY;
-        if(particulaAtual / quantidadeParticulas * 100 > percentualFinalizado)
+
+        if((int) (100. * particulaAtual / quantidadeParticulas) > percentualFinalizado)
         {
-            std::cout << (double) particulaAtual / quantidadeParticulas * 100 << '%' << "..." << '\n';
-            percentualFinalizado = particulaAtual / quantidadeParticulas * 100;
+            percentualFinalizado = 100. * particulaAtual / quantidadeParticulas;
+            std::cout << percentualFinalizado << '%' << "..." << '\n';
         }
 
         updatePosition(posXInicial, posYInicial);
@@ -195,8 +204,7 @@ void rotina()
         if (contadorAbsorvidas == 0 && contadorParticulaIrma == 0)
             arquivoSaida3 << particulaAtual << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";      
 
-        arteriaAtual = 0;
-        contadorTempoParticula = 0;
+
     }
     
 
@@ -233,11 +241,8 @@ int main()
 
             /* Chamar rotina */
             rotina();
-            std::cout << "Absorvidas: " << contadorAbsorvidas << " Irmas: " << contadorParticulaIrma << '\n' << '\n' << '\n';
             
-            /* Zera variaveis para proxima iteracao */
-            contadorAbsorvidas = 0;
-            contadorParticulaIrma = 0;
+            /* Reset variavel para proxima iteracao */
             primeiraASerRecebida = true;
         }
     }
