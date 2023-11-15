@@ -221,9 +221,9 @@ int main()
 {
     createFolder("resultados");
 
-    for(int numEstagio = 0; numEstagio < (int)ESTAGIOS.size(); numEstagio++){
+    for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
         std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
-        for(int semanaAtual = 0; semanaAtual < (int)ESTAGIOS[numEstagio].size(); semanaAtual++){
+        for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
             std::cout << "SEMANA " << semanaAtual + 1 << '\n';
         
         }
