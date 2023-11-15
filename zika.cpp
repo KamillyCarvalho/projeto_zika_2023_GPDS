@@ -8,7 +8,7 @@
 #include <iostream> // funcoes para saida
 #include <fstream> // funcoes para manipulacao de arquivos
 
-// #define DEBUG_MODE // comentar esta linha caso nao esteja em modo debug
+// #define DEBUG_MODE // comentar esta linha caso NAO esteja em modo debug
 #ifdef DEBUG_MODE
     #define RANDOM_SEED_CONSTANT 42
 #endif
