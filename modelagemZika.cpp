@@ -34,7 +34,7 @@ bool atendeCriterioAbsorcaoReflexao(const double resistenciaVascular[], const in
 }
 
 
-void createFolder(const char* folderName){
+void createFolder(const char* folderName, bool printMsg){
     struct stat st;
     if (stat(folderName, &st) == 0)
     {
@@ -43,6 +43,7 @@ void createFolder(const char* folderName){
         system(command.c_str());
     }
     int status = mkdir(folderName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    if(!printMsg) return;
     if (status == 0) 
         printf("\"%s\" folder created\n", folderName);
     else 

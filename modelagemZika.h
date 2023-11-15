@@ -9,7 +9,7 @@
 #ifndef ZIKA_H
 #define ZIKA_H
 
-    void createFolder(const char* folderName);
+    void createFolder(const char* folderName, bool printMsg);
     double calcularDeslocamentoHorizontal(double pressaoHemodinamica, double velocidadeInicial, double incrementoTempo, double coeficienteDifusao, double incrementoWiener);
     double calcularDeslocamentoVertical(int forca, double pressaoVenosa, double incrementoTempo, double coeficienteDifusao, double incrementoWiener);
     bool atendeCriterioParadaY(const double resistenciaVascular[], const int rota[], int arteriaAtual, double posYAtual);
