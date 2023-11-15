@@ -49,3 +49,11 @@ void createFolder(const char* folderName)
     else 
         printf("Error creating %s folder\n", folderName);
 }
+
+double calculaPerfilVelociadaPonto(double resistenciaVenosa, double passoY, double pressaoHemodinamica, int pontoAtual){
+    const double razaoPassoPressao = passoY / pressaoHemodinamica;
+    const double coeficienteVelocidade = 12 / (1.4 * resistenciaVenosa);
+    const double alfa = 1 - exp(-resistenciaVenosa * pontoAtual * razaoPassoPressao);
+    const double beta = 1 - exp(-resistenciaVenosa);
+    return coeficienteVelocidade * (-pontoAtual * razaoPassoPressao + alfa / beta);
+}
