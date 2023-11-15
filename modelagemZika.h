@@ -5,7 +5,6 @@
 #include <vector>
 #include <random>
     
-
 #ifndef ZIKA_H
 #define ZIKA_H
 
