@@ -4,11 +4,14 @@
 #include <ctime>
 #include <vector>
 #include <random>
-    
+#include <iomanip>
 #ifndef ZIKA_H
 #define ZIKA_H
 
     void createFolder(const char* folderName, bool printMsg);
+    void rotina();
+    void updatePosition(double x, double y);
+    void printProgressBar();
     double calcularDeslocamentoHorizontal(double pressaoHemodinamica, double velocidadeInicial, double incrementoTempo, double coeficienteDifusao, double incrementoWiener);
     double calcularDeslocamentoVertical(int forca, double pressaoVenosa, double incrementoTempo, double coeficienteDifusao, double incrementoWiener);
     double calculaPerfilVelocidadePonto(double resistenciaVenosa, double passoY, double pressaoHemodinamica, int pontoAtual);
