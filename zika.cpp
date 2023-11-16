@@ -5,7 +5,6 @@
 */
 
 #include "modelagemZika.h" // funcoes utilizadas na modelagem
-#include <iostream> // funcoes para saida
 #include <fstream> // funcoes para manipulacao de arquivos
 
 /*
@@ -95,6 +94,7 @@ int main()
             sprintf(nomeArquivoSaida2, "%s/%s/E%d_S%d_first_delay.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
             sprintf(nomeArquivoSaida3, "%s/%s/E%d_S%d_received_particles.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
             semana = semanaAtual;
+            // semana = 100'000;
             quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
 
             /* Chamar rotina */
@@ -134,7 +134,7 @@ void rotina()
         }
     }
 
-    for (int particulaAtual = 0, percentualFinalizado = -1; particulaAtual < quantidadeParticulas; particulaAtual++)
+    for (int particulaAtual = 1, percentualFinalizado = -1; particulaAtual <= quantidadeParticulas; particulaAtual++)
     {
         /* Reset variaveis relacionadas a particula atual */
         arteriaAtual = 0;
@@ -148,8 +148,7 @@ void rotina()
         if((int) progressoAtual > percentualFinalizado)
         {
             percentualFinalizado = progressoAtual;
-            std::cout << percentualFinalizado << '%' << "..." << '\r';
-            std::cout.flush();
+            printBarraProgresso(progressoAtual / 100.);
         }
 
         updatePosition(posXInicial, posYInicial);
@@ -157,7 +156,7 @@ void rotina()
         if (contadorAbsorvidas == 0 && contadorParticulaIrma == 0)
             arquivoSaida3 << particulaAtual << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
     }
-    
+    std::cout << std::endl;
     std::cout << "Salvando resultados..." << std::endl;
     arquivoSaida1.close();
     arquivoSaida2.close();
