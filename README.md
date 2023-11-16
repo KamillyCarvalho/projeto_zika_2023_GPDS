@@ -32,48 +32,4 @@ O nome dos subdiretórios com os resultados também pode ser alterado com alguma
 O algoritmo se baseia em alterações aleatórias, porém, as vezes é necessário comparar alguns resultados ao modificar um parâmetro ou outro.
 Para isso, o modo debug fixa a *seed* para a geração de números aleatórios e faz com que os números gerados sejam sempre os mesmos para uma dada *seed*.
 Para rodar a simulação em modo debug, descomente a linha de código que contém ```#define DEBUG_MODE``` logo no início do código principal, após os includes.
-O valor atribuido para o seed será o definido na variavel ```RANDOM_SEED_CONSTANT```. 
-
-# Árvore de arquivos padrão gerada
-.
-├── modelagemZika.cpp
-├── modelagemZika.h
-├── zika.cpp
-├── README.md
-└── resultados
-    ├── E1S1
-    │   ├── E1_S1_first_delay.csv
-    │   ├── E1_S1_particleTime.csv
-    │   └── E1_S1_received_particles.csv
-    ├── E1S2
-    │   ├── E1_S2_first_delay.csv
-    │   ├── E1_S2_particleTime.csv
-    │   └── E1_S2_received_particles.csv
-    ├── E1S3
-    │   ├── E1_S3_first_delay.csv
-    │   ├── E1_S3_particleTime.csv
-    │   └── E1_S3_received_particles.csv
-    ├── E1S4
-    │   ├── E1_S4_first_delay.csv
-    │   ├── E1_S4_particleTime.csv
-    │   └── E1_S4_received_particles.csv
-    ├── E2S1
-    │   ├── E2_S1_first_delay.csv
-    │   ├── E2_S1_particleTime.csv
-    │   └── E2_S1_received_particles.csv
-    ├── E2S2
-    │   ├── E2_S2_first_delay.csv
-    │   ├── E2_S2_particleTime.csv
-    │   └── E2_S2_received_particles.csv
-    ├── E2S3
-    │   ├── E2_S3_first_delay.csv
-    │   ├── E2_S3_particleTime.csv
-    │   └── E2_S3_received_particles.csv
-    ├── E2S4
-    │   ├── E2_S4_first_delay.csv
-    │   ├── E2_S4_particleTime.csv
-    │   └── E2_S4_received_particles.csv
-    ├── ...
-    │   ├── ...
-    │   ├── ...
-  
+O valor atribuido para o seed será o definido na variavel ```RANDOM_SEED_CONSTANT```.
