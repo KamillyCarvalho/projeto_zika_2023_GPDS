@@ -74,9 +74,99 @@ std::ofstream arquivoSaida1;
 std::ofstream arquivoSaida2;  
 std::ofstream arquivoSaida3;
 
+/* Funcao principal */
+int main()
+{
+    char nomePastaResultados[] = "resultados";
+    createFolder(nomePastaResultados, false);
+    for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
+        std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
+        for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
+            std::cout << "SEMANA " << semanaAtual + 1 << '\n';
+
+            /* Cria pasta com resultados do estagio atual e semana atual */
+            char nomePastaEstagioSemana[30];
+            sprintf(nomePastaEstagioSemana, "E%dS%d", numEstagio + 1, semanaAtual + 1);
+            std::string temp = std::string(nomePastaResultados) + "/" + std::string(nomePastaEstagioSemana);
+            createFolder(temp.c_str(), false);
+            
+            /* Seta nomes de arquivos e variaveis antes de chamar a rotina */
+            sprintf(nomeArquivoSaida1, "%s/%s/E%d_S%d_particleTime.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
+            sprintf(nomeArquivoSaida2, "%s/%s/E%d_S%d_first_delay.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
+            sprintf(nomeArquivoSaida3, "%s/%s/E%d_S%d_received_particles.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
+            semana = semanaAtual;
+            quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
+
+            /* Chamar rotina */
+            rotina();
+            
+            /* Reset variavel para proxima iteracao */
+            primeiraASerRecebida = true;
+        }
+    }
+
+    return 0;
+}
+
+void rotina()
+{
+    arquivoSaida1.open(nomeArquivoSaida1);
+    arquivoSaida1 << "Time (s),\n";
+
+    arquivoSaida2.open(nomeArquivoSaida2);   
+    arquivoSaida2 << "artery" << "," << "time" << ",\n";
+
+    arquivoSaida3.open(nomeArquivoSaida3);
+    arquivoSaida3 << "particle" << "," << "artery" << "," << "time" << ",\n";
+
+    srand(time(NULL));
+    #ifdef DEBUG_MODE
+        srand(RANDOM_SEED_CONSTANT);
+    #endif
+
+    for (int i = 0; i < NUM_ARTERIAS; i++)
+    {
+        pressaoHemodinamica = 2 * resistenciaVascular[rota[i]];
+        for (int j = 0; j < static_cast<int>((pressaoHemodinamica + passoY) / passoY); j++)
+        {
+            double velocidadePontoAtual = calculaPerfilVelocidadePonto(resistenciaVenosa, passoY, pressaoHemodinamica, j);
+            perfilVelocidade[i].push_back(velocidadePontoAtual);
+        }
+    }
+
+    for (int particulaAtual = 0, percentualFinalizado = -1; particulaAtual < quantidadeParticulas; particulaAtual++)
+    {
+        /* Reset variaveis relacionadas a particula atual */
+        arteriaAtual = 0;
+        contadorTempoParticula = 0;
+        contadorAbsorvidas = 0;
+        contadorParticulaIrma = 0;
+        double posXInicial = 0.0;
+        double posYInicial = static_cast<double>(rand()) / (RAND_MAX / (pressaoInicial - 2. * limiteY)) + limiteY;
+
+        double progressoAtual = 100. * particulaAtual / quantidadeParticulas;
+        if((int) progressoAtual > percentualFinalizado)
+        {
+            percentualFinalizado = progressoAtual;
+            std::cout << percentualFinalizado << '%' << "..." << '\r';
+            std::cout.flush();
+        }
+
+        updatePosition(posXInicial, posYInicial);
+
+        if (contadorAbsorvidas == 0 && contadorParticulaIrma == 0)
+            arquivoSaida3 << particulaAtual << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
+    }
+    
+    std::cout << "Salvando resultados..." << std::endl;
+    arquivoSaida1.close();
+    arquivoSaida2.close();
+    arquivoSaida3.close();
+    return;
+}
 
 /*  
-    Função principal do codigo.
+    Função de atualizacao de posicao da particula.
     Recursiva e atualiza a posicao da particula a cada chamada.
     Também faz algumas checagens de absorcao ou reflexao. 
 */
@@ -106,7 +196,7 @@ void updatePosition(double x, double y)
     
     x = x + deltaX; // atualiza posicao x
     y = y + deltaY; // atualiza posicao x
-   
+
     contadorTempoParticula++;
     
     /* Determinacao se Absorcao ou Reflexao */
@@ -150,102 +240,5 @@ void updatePosition(double x, double y)
         }
     }
     updatePosition(x, y); // proxima posicao
-
     return;
-}
-
-
-void rotina()
-{
-    arquivoSaida1.open(nomeArquivoSaida1);
-    arquivoSaida1 << "Time (s),\n";
-
-    arquivoSaida2.open(nomeArquivoSaida2);   
-    arquivoSaida2 << "artery" << "," << "time" << ",\n";
-
-    arquivoSaida3.open(nomeArquivoSaida3);
-    arquivoSaida3 << "particle" << "," << "artery" << "," << "time" << ",\n";
-
-    srand(time(NULL));
-    #ifdef DEBUG_MODE
-        srand(RANDOM_SEED_CONSTANT);
-    #endif
-
-    for (int i = 0; i < NUM_ARTERIAS; i++)
-    {
-        pressaoHemodinamica = 2 * resistenciaVascular[rota[i]];
-
-        for (int j = 0; j < static_cast<int>((pressaoHemodinamica + passoY) / passoY); j++)
-        {
-            double velocidadePontoAtual = calculaPerfilVelocidadePonto(resistenciaVenosa, passoY, pressaoHemodinamica, j);
-            perfilVelocidade[i].push_back(velocidadePontoAtual);
-        }
-    }
-
-
-    for (int particulaAtual = 0, percentualFinalizado = -1; particulaAtual < quantidadeParticulas; particulaAtual++)
-    {
-        /* Reset variaveis relacionadas a particula atual */
-        arteriaAtual = 0;
-        contadorTempoParticula = 0;
-        contadorAbsorvidas = 0;
-        contadorParticulaIrma = 0;
-        double posXInicial = 0.0;
-        double posYInicial = static_cast<double>(rand()) / (RAND_MAX / (pressaoInicial - 2. * limiteY)) + limiteY;
-
-        if((int) (100. * particulaAtual / quantidadeParticulas) > percentualFinalizado)
-        {
-            percentualFinalizado = 100. * particulaAtual / quantidadeParticulas;
-            std::cout << percentualFinalizado << '%' << "..." << '\n';
-        }
-
-        updatePosition(posXInicial, posYInicial);
-
-        if (contadorAbsorvidas == 0 && contadorParticulaIrma == 0)
-            arquivoSaida3 << particulaAtual << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";      
-
-
-    }
-    
-
-    std::cout << "Salvando resultados..." << std::endl;
-
-    arquivoSaida1.close();
-    arquivoSaida2.close();
-    arquivoSaida3.close();
-
-    return;
-}
-
-int main()
-{
-    char nomePastaResultados[] = "resultados";
-    createFolder(nomePastaResultados, false);
-    for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
-        std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
-        for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
-            std::cout << "SEMANA " << semanaAtual + 1 << '\n';
-
-            /* Cria pasta com resultados do estagio atual e semana atual */
-            char nomePastaEstagioSemana[30];
-            sprintf(nomePastaEstagioSemana, "E%dS%d", numEstagio + 1, semanaAtual + 1);
-            std::string temp = std::string(nomePastaResultados) + "/" + std::string(nomePastaEstagioSemana);
-            createFolder(temp.c_str(), false);
-            
-            /* Seta nomes de arquivos e variaveis antes de chamar a rotina */
-            sprintf(nomeArquivoSaida1, "%s/%s/E%d_S%d_particleTime.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
-            sprintf(nomeArquivoSaida2, "%s/%s/E%d_S%d_first_delay.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
-            sprintf(nomeArquivoSaida3, "%s/%s/E%d_S%d_received_particles.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
-            semana = semanaAtual;
-            quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
-
-            /* Chamar rotina */
-            rotina();
-            
-            /* Reset variavel para proxima iteracao */
-            primeiraASerRecebida = true;
-        }
-    }
-
-    return 0;
 }
