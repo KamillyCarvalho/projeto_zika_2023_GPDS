@@ -94,7 +94,6 @@ int main()
             sprintf(nomeArquivoSaida2, "%s/%s/E%d_S%d_first_delay.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
             sprintf(nomeArquivoSaida3, "%s/%s/E%d_S%d_received_particles.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
             semana = semanaAtual;
-            // semana = 100'000;
             quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
 
             /* Chamar rotina */
