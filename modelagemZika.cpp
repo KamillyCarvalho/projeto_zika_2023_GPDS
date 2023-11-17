@@ -34,20 +34,22 @@ bool atendeCriterioAbsorcaoReflexao(const double resistenciaVascular[], const in
 }
 
 
-void createFolder(const char* folderName, bool printMsg){
+void criaPasta(const char* folderName, bool printMsg){
     struct stat st;
     if (stat(folderName, &st) == 0)
     {
         // Se o diretório já existe, remove-o
         std::string command = "rm -rf " + std::string(folderName);
-        system(command.c_str());
+        int result = system(command.c_str());
+        if(!result and printMsg)
+            printf("Erro ao tentar criar pasta \"%s\"\n", folderName);
     }
     int status = mkdir(folderName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     if(!printMsg) return;
     if (status == 0) 
-        printf("\"%s\" folder created\n", folderName);
+        printf("Pasta \"%s\" criada\n", folderName);
     else 
-        printf("Error creating \"%s\" folder\n", folderName);
+        printf("Erro ao criar pasta \"%s\"\n", folderName);
 }
 
 double calculaPerfilVelocidadePonto(double resistenciaVenosa, double passoY, double pressaoHemodinamica, int pontoAtual){

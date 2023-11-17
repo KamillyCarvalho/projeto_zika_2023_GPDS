@@ -77,7 +77,7 @@ std::ofstream arquivoSaida3;
 int main()
 {
     char nomePastaResultados[] = "resultados";
-    createFolder(nomePastaResultados, false);
+    criaPasta(nomePastaResultados, false);
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
         std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
         for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
@@ -87,7 +87,7 @@ int main()
             char nomePastaEstagioSemana[30];
             sprintf(nomePastaEstagioSemana, "E%dS%d", numEstagio + 1, semanaAtual + 1);
             std::string temp = std::string(nomePastaResultados) + "/" + std::string(nomePastaEstagioSemana);
-            createFolder(temp.c_str(), false);
+            criaPasta(temp.c_str(), false);
             
             /* Seta nomes de arquivos e variaveis antes de chamar a rotina */
             sprintf(nomeArquivoSaida1, "%s/%s/E%d_S%d_particleTime.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
