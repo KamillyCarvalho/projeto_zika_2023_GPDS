@@ -12,7 +12,7 @@
 
     void criaPasta(const char* folderName, bool printMsg);
     void rotina();
-    void updatePosition(double x, double y);
+    void atualizaPosicao(double x, double y);
     void printBarraProgresso(double progresso);
     double calcularDeslocamentoHorizontal(double pressaoHemodinamica, double velocidadeInicial, double incrementoTempo, double coeficienteDifusao, double incrementoWiener);
     double calcularDeslocamentoVertical(int forca, double pressaoVenosa, double incrementoTempo, double coeficienteDifusao, double incrementoWiener);

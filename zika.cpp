@@ -1,7 +1,7 @@
 /*
     Modelo computacional para simular o fluxo sanguíneo em artérias específicas do corpo humano.
     Nesse modelo, cada partícula representa uma pequena porção do fluido sanguíneo.
-    A função updatePosition é responsável por calcular como cada partícula se move ao longo do tempo devido a diferentes forças e influências.
+    A função atualizaPosicao é responsável por calcular como cada partícula se move ao longo do tempo devido a diferentes forças e influências.
 */
 
 #include "modelagemZika.h" // funcoes utilizadas na modelagem
@@ -150,7 +150,7 @@ void rotina()
             printBarraProgresso(progressoAtual / 100.);
         }
 
-        updatePosition(posXInicial, posYInicial);
+        atualizaPosicao(posXInicial, posYInicial);
 
         if (contadorAbsorvidas == 0 && contadorParticulaIrma == 0)
             arquivoSaida3 << particulaAtual << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
@@ -168,7 +168,7 @@ void rotina()
     Recursiva e atualiza a posicao da particula a cada chamada.
     Também faz algumas checagens de absorcao ou reflexao. 
 */
-void updatePosition(double x, double y)
+void atualizaPosicao(double x, double y)
 {
     int indiceY = (int) (y * 1000); // indice do perfil de velocidade baseado na posicao de y
     double incrementoWiener = distribuicaoNormal(geradorDistNormal); // incremento da iteracao
@@ -237,6 +237,6 @@ void updatePosition(double x, double y)
             }
         }
     }
-    updatePosition(x, y); // proxima posicao
+    atualizaPosicao(x, y); // proxima posicao
     return;
 }
