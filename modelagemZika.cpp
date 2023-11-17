@@ -72,3 +72,74 @@ void printBarraProgresso(double progresso){
         std::cout << "] " << int(progresso * 100.0) << " %\r";
         std::cout.flush();
 }
+
+
+std::string numeroPorExtenso(long long numero) {
+    if (numero == 0) {
+        return "zero";
+    }
+
+    // Arrays para as palavras correspondentes aos dígitos e às potências de dez
+    const std::string unidades[] = {"", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"};
+    const std::string especiais[] = {"", "onze", "doze", "treze", "catorze", "quinze", "dezesseis", "dezessete", "dezoito", "dezenove"};
+    const std::string dezenas[] = {"", "dez", "vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta", "oitenta", "noventa"};
+    const std::string centenas[] = {"", "cento", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"};
+    const std::string milhares[] = {"", "mil", "milhão", "bilhão", "trilhão", "quadrilhão", "quintilhão", "sextilhão", "septilhão", "octilhão", "nonilhão", "decilhão"};
+    
+    std::string numeroExtenso;
+
+    int posicao = 0;
+
+    while (numero > 0) {
+        int grupo = numero % 1000;
+
+        if (grupo > 0) {
+            std::string extensoGrupo;
+
+            int centena = grupo / 100;
+            int dezena = (grupo % 100) / 10;
+            int unidade = grupo % 10;
+
+            if (centena > 0) {
+                extensoGrupo += centenas[centena];
+                if ((dezena > 0 || unidade > 0) && centena == 1) {
+                    extensoGrupo = "cento e ";
+                }
+            }
+
+            if (dezena == 1 && unidade > 0) {
+                extensoGrupo += especiais[unidade];
+            } else {
+                if (dezena > 0) {
+                    extensoGrupo += dezenas[dezena];
+                    if (unidade > 0) {
+                        extensoGrupo += " e ";
+                    }
+                }
+
+                if (unidade > 0 && dezena != 1) {
+                    extensoGrupo += unidades[unidade];
+                }
+            }
+
+            if (posicao > 0) {
+                extensoGrupo += " ";
+                extensoGrupo += milhares[posicao];
+                if (grupo > 1) {
+                    extensoGrupo += "es";
+                }
+            }
+
+            if (!numeroExtenso.empty()) {
+                numeroExtenso = extensoGrupo + " " + numeroExtenso;
+            } else {
+                numeroExtenso = extensoGrupo;
+            }
+        }
+
+        numero /= 1000;
+        posicao++;
+    }
+
+    return numeroExtenso;
+}
