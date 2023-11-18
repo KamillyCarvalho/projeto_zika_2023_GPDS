@@ -31,8 +31,8 @@ Pode-se alterar o nome da pasta de resultados, atualmente como "resultados", tro
 O nome dos subdiretórios com os resultados também pode ser alterado com alguma manipulação da função ```sprintf()```.
 
 # Modo Debug
-O algoritmo se baseia em alterações aleatórias, porém, as vezes é necessário comparar alguns resultados ao modificar um parâmetro ou outro.
-Para isso, o modo debug fixa a *seed* para a geração de números aleatórios e faz com que os números gerados sejam sempre os mesmos para uma dada *seed*.
+O algoritmo possui pseudo-aleatoriedade, porém, as vezes é necessário comparar alguns resultados ao modificar um parâmetro ou outro.
+Para isso, o modo *debug* fixa a *seed* para a geração de números aleatórios e faz com que os números gerados sejam sempre os mesmos para uma dada *seed*.
 
-Para rodar a simulação em modo debug, descomente a linha de código que contém ```#define DEBUG_MODE``` logo no início do código principal, após os includes.
-O valor atribuido para o seed será o definido na variável ```RANDOM_SEED_CONSTANT```.
+Para rodar a simulação em modo *debug*, descomente a linha de código que contém ```#define DEBUG_MODE``` logo no início do código principal, após os includes.
+O valor atribuido para o *seed* será o definido na variável ```RANDOM_SEED_CONSTANT```.
