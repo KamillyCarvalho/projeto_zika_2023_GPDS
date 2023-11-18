@@ -94,8 +94,8 @@ int main()
             semana = semanaAtual;
             quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
             
-            std::cout << "SEMANA " << semanaAtual + 1 << " -> " << quantidadeParticulas << \
-            '(' << numeroPorExtenso(quantidadeParticulas) << ')' << " de particulas" << '\n';
+            std::cout << "SEMANA " << semanaAtual + 1 << " -> Simulando " << quantidadeParticulas << \
+            ' ' << '(' << numeroPorExtenso(quantidadeParticulas) << ')' << " particulas" << '\n';
 
             /* Chamar rotina */
             rotina();
