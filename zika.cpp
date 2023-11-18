@@ -154,7 +154,7 @@ void rotina()
             printBarraProgresso(progressoAtual / 100.);
         }
 
-        atualizaPosicaoIterativa(posXInicial, posYInicial);
+        atualizaPosicao(posXInicial, posYInicial);
 
         if (contadorAbsorvidas == 0 && contadorParticulaIrma == 0)
             arquivoSaida3 << particulaAtual << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
@@ -167,85 +167,7 @@ void rotina()
     return;
 }
 
-/*  
-    Função de atualizacao de posicao da particula.
-    Recursiva e atualiza a posicao da particula a cada chamada.
-    Também faz algumas checagens de absorcao ou reflexao. 
-*/
-void atualizaPosicao(double x, double y)
-{
-    int indiceY = (int) (y * 1000); // indice do perfil de velocidade baseado na posicao de y
-    double incrementoWiener = distribuicaoNormal(geradorDistNormal); // incremento da iteracao
-    double* perfilVelocidadeArteriaAtual = perfilVelocidade[arteriaAtual].data();
-
-    /* Calculando a posicao */
-    int forca = 0;
-    if (y > resistenciaVascular[rota[arteriaAtual]] or y < resistenciaVascular[rota[arteriaAtual]])
-        forca = 1;
-    else
-    {
-        srand(time(NULL));
-        #ifdef DEBUG_MODE
-            srand(RANDOM_SEED_CONSTANT);
-        #endif
-
-        if (rand() % 2 == 1) forca = -1;
-        else forca = 1;
-    }
-    
-    double deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[semana][arteriaAtual], perfilVelocidadeArteriaAtual[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
-    double deltaY = calcularDeslocamentoVertical(forca, pressaoVenosa, INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
-    
-    x = x + deltaX; // atualiza posicao x
-    y = y + deltaY; // atualiza posicao x
-
-    contadorTempoParticula++;
-    
-    /* Determinacao se Absorcao ou Reflexao */
-    if (atendeCriterioAbsorcaoReflexao(resistenciaVascular, rota, arteriaAtual, y))
-    {
-        int ehReflexao = distribuicaoAbsorcaoReflexao(geradorAbsorcaoReflexao);
-
-        if (ehReflexao) // Reflexao
-        {
-            y = y - 2 * deltaY; 
-        }
-        else // Absorcao
-        {
-            contadorAbsorvidas++;
-            return;
-        }
-    }
-
-    /* Arteria e Criterio de Parada */
-    if (atendeCriterioParadaX(totalD, comprimentoArteria, rota, arteriaAtual, x))
-    {
-        if (primeiraASerRecebida)
-        {
-            arquivoSaida2 << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
-        }
-        if (arteriaAtual == NUM_ARTERIAS - 1)
-        {   
-            arquivoSaida1 << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
-            primeiraASerRecebida = false;
-            return;
-        }
-        else
-        {
-            arteriaAtual++;
-            /* Arteria irma */
-            if (atendeCriterioParadaY(resistenciaVascular, rota, arteriaAtual, y))
-            {
-                contadorParticulaIrma++;
-                return;
-            }
-        }
-    }
-    atualizaPosicao(x, y); // proxima posicao
-    return;
-}
-
-void atualizaPosicaoIterativa(double x, double y){
+void atualizaPosicao(double x, double y){
     while(true){
         int indiceY = (int) (y * 1000); // indice do perfil de velocidade baseado na posicao de y
         double incrementoWiener = distribuicaoNormal(geradorDistNormal); // incremento da iteracao
