@@ -74,17 +74,18 @@ void printBarraProgresso(double progresso){
 }
 
 
-std::string numeroPorExtenso(long long numero) {
+// Arrays para as palavras correspondentes aos dígitos e às potências de dez
+const std::string unidades[] = {"", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"};
+const std::string especiais[] = {"", "onze", "doze", "treze", "catorze", "quinze", "dezesseis", "dezessete", "dezoito", "dezenove"};
+const std::string dezenas[] = {"", "dez", "vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta", "oitenta", "noventa"};
+const std::string centenas[] = {"", "cento", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"};
+const std::string milhares[] = {"", "mil", "milhão", "bilhão"};
+
+std::string numeroPorExtenso(int numero){
     if (numero == 0) {
         return "zero";
     }
 
-    // Arrays para as palavras correspondentes aos dígitos e às potências de dez
-    const std::string unidades[] = {"", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"};
-    const std::string especiais[] = {"", "onze", "doze", "treze", "catorze", "quinze", "dezesseis", "dezessete", "dezoito", "dezenove"};
-    const std::string dezenas[] = {"", "dez", "vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta", "oitenta", "noventa"};
-    const std::string centenas[] = {"", "cento", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"};
-    const std::string milhares[] = {"", "mil", "milhão", "bilhão", "trilhão", "quadrilhão", "quintilhão", "sextilhão", "septilhão", "octilhão", "nonilhão", "decilhão"};
     
     std::string numeroExtenso;
 
