@@ -34,8 +34,6 @@ int main()
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
         std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
         for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
-            std::cout << "SEMANA " << semanaAtual + 1 << '\n';
-
             /* Cria pasta com resultados do estagio atual e semana atual */
             char nomePastaEstagioSemana[30];
             sprintf(nomePastaEstagioSemana, "E%dS%d", numEstagio + 1, semanaAtual + 1);
@@ -48,6 +46,9 @@ int main()
             sprintf(nomeArquivoSaida3, "%s/%s/E%d_S%d_received_particles.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
             semana = semanaAtual;
             quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
+            
+            std::cout << "SEMANA " << semanaAtual + 1 << " -> Simulando " << quantidadeParticulas << \
+            ' ' << '(' << numeroPorExtenso(quantidadeParticulas) << ')' << " particulas" << '\n';
 
             /* Chamar rotina */
             rotina();
@@ -116,80 +117,61 @@ void rotina()
     return;
 }
 
-/*  
-    Função de atualizacao de posicao da particula.
-    Recursiva e atualiza a posicao da particula a cada chamada.
-    Também faz algumas checagens de absorcao ou reflexao. 
-*/
-void atualizaPosicao(double x, double y)
-{
-    int indiceY = (int) (y * 1000); // indice do perfil de velocidade baseado na posicao de y
-    double incrementoWiener = distribuicaoNormal(geradorDistNormal); // incremento da iteracao
-    double* perfilVelocidadeArteriaAtual = perfilVelocidade[arteriaAtual].data();
+void atualizaPosicao(double x, double y){
+    while(true){
+        int indiceY = (int) (y * 1000); // indice do perfil de velocidade baseado na posicao de y
+        double incrementoWiener = distribuicaoNormal(geradorDistNormal); // incremento da iteracao
+        double* perfilVelocidadeArteriaAtual = perfilVelocidade[arteriaAtual].data();
 
-    /* Calculando a posicao */
-    int forca = 0;
-    if (y > resistenciaVascular[rota[arteriaAtual]] or y < resistenciaVascular[rota[arteriaAtual]])
-        forca = 1;
-    else
-    {
-        srand(time(NULL));
-        #ifdef DEBUG_MODE
-            srand(RANDOM_SEED_CONSTANT);
-        #endif
+        /* Calculando a posicao */
+        int forca = 0;
+        if(y > resistenciaVascular[rota[arteriaAtual]] or y < resistenciaVascular[rota[arteriaAtual]])
+            forca = 1;
+        else{
+            srand(time(NULL));
+            #ifdef DEBUG_MODE
+                srand(RANDOM_SEED_CONSTANT);
+            #endif
 
-        if (rand() % 2 == 1) forca = -1;
-        else forca = 1;
-    }
-    
-    double deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[semana][arteriaAtual], perfilVelocidadeArteriaAtual[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
-    double deltaY = calcularDeslocamentoVertical(forca, pressaoVenosa, INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
-    
-    x = x + deltaX; // atualiza posicao x
-    y = y + deltaY; // atualiza posicao x
-
-    contadorTempoParticula++;
-    
-    /* Determinacao se Absorcao ou Reflexao */
-    if (atendeCriterioAbsorcaoReflexao(resistenciaVascular, rota, arteriaAtual, y))
-    {
-        int ehReflexao = distribuicaoAbsorcaoReflexao(geradorAbsorcaoReflexao);
-
-        if (ehReflexao) // Reflexao
-        {
-            y = y - 2 * deltaY; 
+            if(rand() % 2 == 1) forca = -1;
+            else forca = 1;
         }
-        else // Absorcao
-        {
-            contadorAbsorvidas++;
-            return;
-        }
-    }
+        
+        double deltaX = calcularDeslocamentoHorizontal(elasticidadeParede[semana][arteriaAtual], perfilVelocidadeArteriaAtual[indiceY], INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
+        double deltaY = calcularDeslocamentoVertical(forca, pressaoVenosa, INCREMENTO_TEMPO, coeficienteDifusao, incrementoWiener);
+        x += deltaX; // atualiza posicao x
+        y += deltaY; // atualiza posicao x
+        contadorTempoParticula++; // tempo da particula
 
-    /* Arteria e Criterio de Parada */
-    if (atendeCriterioParadaX(totalD, comprimentoArteria, rota, arteriaAtual, x))
-    {
-        if (primeiraASerRecebida)
-        {
-            arquivoSaida2 << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
+        /* Determinacao se Absorcao ou Reflexao */
+        if(atendeCriterioAbsorcaoReflexao(resistenciaVascular, rota, arteriaAtual, y)){
+            int ehReflexao = distribuicaoAbsorcaoReflexao(geradorAbsorcaoReflexao);
+            if(ehReflexao){ // Reflexao
+                y -= 2 * deltaY; 
+            }
+            else{ // Absorcao
+                contadorAbsorvidas++;
+                break;
+            }
         }
-        if (arteriaAtual == NUM_ARTERIAS - 1)
-        {   
-            arquivoSaida1 << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
-            primeiraASerRecebida = false;
-            return;
-        }
-        else
-        {
-            arteriaAtual++;
-            /* Arteria irma */
-            if (atendeCriterioParadaY(resistenciaVascular, rota, arteriaAtual, y))
-            {
-                contadorParticulaIrma++;
-                return;
+        /* Arteria e Criterio de Parada */
+        if(atendeCriterioParadaX(totalD, comprimentoArteria, rota, arteriaAtual, x)){
+            if(primeiraASerRecebida)
+                arquivoSaida2 << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
+            
+            if(arteriaAtual == NUM_ARTERIAS - 1){   
+                arquivoSaida1 << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
+                primeiraASerRecebida = false;
+                break;
+            }else{
+                arteriaAtual++;
+                /* Arteria irma */
+                if(atendeCriterioParadaY(resistenciaVascular, rota, arteriaAtual, y)){
+                    contadorParticulaIrma++;
+                    break;
+                }
             }
         }
     }
-    atualizaPosicao(x, y); // proxima posicao
     return;
 }
