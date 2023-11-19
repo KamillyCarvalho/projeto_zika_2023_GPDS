@@ -2,8 +2,6 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
-#include <vector>
-#include <random>
 #include <iomanip>
 #include <iostream>
 
