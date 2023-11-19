@@ -4,10 +4,10 @@
     A função atualizaPosicao é responsável por calcular como cada partícula se move ao longo do tempo devido a diferentes forças e influências.
 */
 
-#include "funcsimu.h" // funcoes utilizadas na modelagem
-#include "constantes.h" // constantes utilizadas na simulacao
-#include "uteis.h" // utilidade geral
-#include "nucleo.h" // funcoes principais de execucao do algoritmo 
+#include "headers/funcsimu.h" // funcoes utilizadas na modelagem
+#include "headers/constantes.h" // constantes utilizadas na simulacao
+#include "headers/uteis.h" // utilidade geral
+#include "headers/nucleo.h" // funcoes principais de execucao do algoritmo 
 
 /* Variaveis GLOBAIS utilizadas na simulacao */
 int semana = 0;
