@@ -42,15 +42,11 @@ const double fracaoRefletida = 1 - fracaoAbsorvida;
 const double limiteY = 1e-3;
 const double passoY = 1e-3;
 
-#ifdef DEBUG_MODE
-    const std::vector<int> estagio1 = {6'558'050, 1'000, 1'000, 1'000};
-    const std::vector<int> estagio2 = {1'000, 1'000, 1'000, 1'000};
-    const std::vector<int> estagio3 = {1'000, 1'000, 1'000, 1'000};
-#else
-    const std::vector<int> estagio1 = {6'558'050, 7'906'264, 8'655'256, 8'899'930};
-    const std::vector<int> estagio2 = {13'201'581, 36'097'470, 53'530'880, 43'530'297};
-    const std::vector<int> estagio3 = {2'627'406, 7'205'390, 10'647'480, 8'617'887};
-#endif
+
+const std::vector<int> estagio1 = {6'558'050, 7'906'264, 8'655'256, 8'899'930};
+const std::vector<int> estagio2 = {13'201'581, 36'097'470, 53'530'880, 43'530'297};
+const std::vector<int> estagio3 = {2'627'406, 7'205'390, 10'647'480, 8'617'887};
+
 
 const std::vector<std::vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
 
