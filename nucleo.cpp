@@ -11,10 +11,7 @@ void rotina()
     arquivoSaida3.open(nomeArquivoSaida3);
     arquivoSaida3 << "particle" << "," << "artery" << "," << "time" << ",\n";
 
-    srand(time(NULL));
-    #ifdef DEBUG_MODE
-        srand(RANDOM_SEED_CONSTANT);
-    #endif
+    srand(seedParaRand());
 
     for (int i = 0; i < NUM_ARTERIAS; i++)
     {
@@ -67,11 +64,7 @@ void atualizaPosicao(double x, double y){
         if(y > resistenciaVascular[rota[arteriaAtual]] or y < resistenciaVascular[rota[arteriaAtual]])
             forca = 1;
         else{
-            srand(time(NULL));
-            #ifdef DEBUG_MODE
-                srand(RANDOM_SEED_CONSTANT);
-            #endif
-
+            srand(seedParaRand());
             if(rand() % 2 == 1) forca = -1;
             else forca = 1;
         }
