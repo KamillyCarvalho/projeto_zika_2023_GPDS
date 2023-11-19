@@ -6,8 +6,6 @@
 #ifndef FUNCOES_H
 #define FUNCOES_H
 
-    void rotina();
-    void atualizaPosicao(double x, double y);
     double calcularDeslocamentoHorizontal(double pressaoHemodinamica, double velocidadeInicial, double incrementoTempo, double coeficienteDifusao, double incrementoWiener);
     double calcularDeslocamentoVertical(int forca, double pressaoVenosa, double incrementoTempo, double coeficienteDifusao, double incrementoWiener);
     double calculaPerfilVelocidadePonto(double resistenciaVenosa, double passoY, double pressaoHemodinamica, int pontoAtual);
