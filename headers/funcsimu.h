@@ -1,6 +1,5 @@
 #include <cmath>
 #include <cstdlib>
-#include <ctime>
 #include <iomanip>
 
 #ifndef FUNCOES_H
