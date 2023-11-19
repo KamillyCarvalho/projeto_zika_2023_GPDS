@@ -4,7 +4,10 @@
 #ifndef ZIKA_CONSTANTS_H
 #define ZIKA_CONSTANTS_H
 
+/* Habilita ou desabilita debug mode */
 // #define DEBUG_MODE
+
+#define RANDOM_SEED 42
 
 /* Variaveis de configuracao */
 extern const char nomePastaResultados[];
