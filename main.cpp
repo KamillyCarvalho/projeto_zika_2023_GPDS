@@ -4,8 +4,9 @@
     A função atualizaPosicao é responsável por calcular como cada partícula se move ao longo do tempo devido a diferentes forças e influências.
 */
 
-#include "modelagemZika.h" // funcoes utilizadas na modelagem
+#include "funcsimu.h" // funcoes utilizadas na modelagem
 #include "constantes.h" // constantes utilizadas na simulacao
+#include "uteis.h" // utilidade geral
 #include <fstream> // funcoes para manipulacao de arquivos
 
 /* Variaveis GLOBAIS utilizadas na simulacao */
