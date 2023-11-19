@@ -41,3 +41,6 @@ extern std::default_random_engine geradorAbsorcaoReflexao;
 extern std::discrete_distribution<int> distribuicaoAbsorcaoReflexao;
 
 #endif
+
+// adiciona comentario
+// exemplo
