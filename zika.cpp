@@ -84,8 +84,6 @@ int main()
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
         std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
         for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
-            std::cout << "SEMANA " << semanaAtual + 1 << '\n';
-
             /* Cria pasta com resultados do estagio atual e semana atual */
             char nomePastaEstagioSemana[30];
             sprintf(nomePastaEstagioSemana, "E%dS%d", numEstagio + 1, semanaAtual + 1);
@@ -98,6 +96,9 @@ int main()
             sprintf(nomeArquivoSaida3, "%s/%s/E%d_S%d_received_particles.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
             semana = semanaAtual;
             quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
+            
+            std::cout << "SEMANA " << semanaAtual + 1 << " -> Simulando " << quantidadeParticulas << \
+            ' ' << '(' << numeroPorExtenso(quantidadeParticulas) << ')' << " particulas" << '\n';
 
             /* Chamar rotina */
             rotina();
