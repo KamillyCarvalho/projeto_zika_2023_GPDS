@@ -142,3 +142,7 @@ std::string numeroPorExtenso(int numero){
     }
     return numeroExtenso;
 }
+
+void printHello(){
+    std::cout << "Hello\n";
+}

@@ -19,5 +19,6 @@
     bool atendeCriterioParadaX(const double totalD[], const double comprimentoArteria[], const int rota[], int arteriaAtual, double posXAtual);
     bool atendeCriterioAbsorcaoReflexao(const double resistenciaVascular[], const int rota[], const int arteriaAtual, double posAtualY);
     std::string numeroPorExtenso(int numero);
+    void printHello();
 
 #endif
