@@ -101,3 +101,11 @@ std::string numeroPorExtenso(int numero){
     }
     return numeroExtenso;
 }
+
+unsigned int seedParaRand(){
+    #ifdef DEBUG_MODE
+        return RANDOM_SEED;
+    #else
+        return time(NULL);
+    #endif
+}
