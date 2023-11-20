@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ctime>
 #include "constantes.h"
+#include "debug.h"
 
 #ifndef UTEIS_H
 #define UTEIS_H
