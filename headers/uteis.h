@@ -11,6 +11,7 @@
     void printBarraProgresso(double progresso);
     void criaPasta(const char* folderName, bool printMsg);
     void filtrarArquivosPorSufixo(const char *nomePastaASerRealizadoFiltro, const char *sufixoASerFiltrado);
+    void informaSeModoDebug();
     char* criaPastaEstagioSemanaAtual(int estagio, int semana);
     std::string numeroPorExtenso(int numero);
     unsigned int seedParaRand();

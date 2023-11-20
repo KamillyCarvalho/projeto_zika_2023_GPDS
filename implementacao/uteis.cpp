@@ -126,3 +126,11 @@ char* criaPastaEstagioSemanaAtual(int estagio, int semana){
     criaPasta(temp.c_str(), false);
     return nomePastaEstagioSemana;
 }
+
+void informaSeModoDebug(){
+    #ifdef DEBUG_MODE
+        std::cout << std::endl << "Codigo rodando em ***modo DEBUG***" << std::endl << std::endl;
+    #else
+        std::cout << std::endl << "Codigo rodando em modo NORMAL" <<  std::endl << std::endl;
+    #endif
+}
