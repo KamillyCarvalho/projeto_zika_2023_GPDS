@@ -118,3 +118,11 @@ void filtrarArquivosPorSufixo(const char *nomePastaASerRealizadoFiltro, const ch
     if(status != 0)
         std::cout << "Nao foi possivel filtrar os resultados" << std::endl;
 }
+
+char* criaPastaEstagioSemanaAtual(int estagio, int semana){
+    static char nomePastaEstagioSemana[10];
+    sprintf(nomePastaEstagioSemana, "E%dS%d", estagio, semana);
+    std::string temp = std::string(nomePastaResultados) + "/" + std::string(nomePastaEstagioSemana);
+    criaPasta(temp.c_str(), false);
+    return nomePastaEstagioSemana;
+}
