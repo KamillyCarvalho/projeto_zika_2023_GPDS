@@ -31,6 +31,7 @@ std::ofstream arquivoSaida3;
 /* Funcao principal */
 int main()
 {
+    informaSeModoDebug();
     criaPasta(nomePastaResultados, false);
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
         std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
