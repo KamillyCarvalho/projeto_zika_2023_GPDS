@@ -109,3 +109,12 @@ unsigned int seedParaRand(){
         return time(NULL);
     #endif
 }
+
+void filtrarArquivosPorSufixo(const char *nomePastaASerRealizadoFiltro, const char *sufixoASerFiltrado){
+    char command[300];
+    criaPasta("filtrados", false);
+    sprintf(command, "find ./%s -type f -name \"*%s\" -exec cp {} ./filtrados \\;", nomePastaASerRealizadoFiltro, sufixoASerFiltrado);
+    int status = system(command);
+    if(status != 0)
+        std::cout << "Nao foi possivel filtrar os resultados" << std::endl;
+}

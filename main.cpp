@@ -58,6 +58,6 @@ int main()
             primeiraASerRecebida = true;
         }
     }
-
+    filtrarArquivosPorSufixo(nomePastaResultados, "received_particles.csv");
     return 0;
 }
