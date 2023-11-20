@@ -1,4 +1,4 @@
-#include "headers/nucleo.h"
+#include "../headers/nucleo.h"
 
 void rotina()
 {

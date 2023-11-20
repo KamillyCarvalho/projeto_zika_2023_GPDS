@@ -1,4 +1,4 @@
-#include "headers/funcsimu.h"
+#include "../headers/funcsimu.h"
 
 double calcularDeslocamentoHorizontal(double elasticidadeParede, double velocidadeInicial, double incrementoTempo, double coeficienteDifusao, double incrementoWiener){
     /*
