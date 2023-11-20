@@ -35,23 +35,21 @@ int main()
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
         std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
         for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
-            /* Cria pasta com resultados do estagio atual e semana atual */
-            char nomePastaEstagioSemana[30];
-            sprintf(nomePastaEstagioSemana, "E%dS%d", numEstagio + 1, semanaAtual + 1);
-            std::string temp = std::string(nomePastaResultados) + "/" + std::string(nomePastaEstagioSemana);
-            criaPasta(temp.c_str(), false);
+            /* Cria pasta com resultados do estagio atual e semana atual e retorna nome da pasta */
+            char *nomePastaEstagioSemana = criaPastaEstagioSemanaAtual(numEstagio + 1, semanaAtual + 1);
             
             /* Seta nomes de arquivos e variaveis antes de chamar a rotina */
             sprintf(nomeArquivoSaida1, "%s/%s/E%d_S%d_particleTime.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
             sprintf(nomeArquivoSaida2, "%s/%s/E%d_S%d_first_delay.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
             sprintf(nomeArquivoSaida3, "%s/%s/E%d_S%d_received_particles.csv", nomePastaResultados, nomePastaEstagioSemana, numEstagio + 1, semanaAtual + 1);
-            semana = semanaAtual;
-            quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual];
+            semana = semanaAtual; // seta variavel global
+            quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual]; // seta variavel global
             
+            /* Print msg no terminal */
             std::cout << "SEMANA " << semanaAtual + 1 << " -> Simulando " << quantidadeParticulas << \
             ' ' << '(' << numeroPorExtenso(quantidadeParticulas) << ')' << " particulas" << '\n';
 
-            /* Chamar rotina */
+            /* Chama rotina */
             rotina();
             
             /* Reset variavel para proxima iteracao */
