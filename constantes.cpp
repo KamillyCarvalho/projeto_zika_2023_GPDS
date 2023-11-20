@@ -35,7 +35,9 @@ const std::vector<int> estagio2 = {13'201'581, 36'097'470, 53'530'880, 43'530'29
 const std::vector<int> estagio3 = {2'627'406, 7'205'390, 10'647'480, 8'617'887};
 const std::vector<std::vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
 
-/* Geradores de numeros aleatorios */
+/*
+    Geradores de numeros aleatorios
+*/
 std::default_random_engine geradorDistNormal;
 std::normal_distribution<double> distribuicaoNormal(0, sqrt(INCREMENTO_TEMPO));
 
