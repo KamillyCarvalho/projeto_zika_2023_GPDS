@@ -77,9 +77,10 @@ Modifique as funções ```sprintf()``` em *main.cpp*. Basta observar o padrão c
 Comente a linha com a função ```filtrarArquivosPorSufixo``` em *main.cpp*.
 
 **Lembre-se de salvar cada alteração realizada e compilar e executar o código novamente.**
+
 # O que é o modo debug?
 O algoritmo possui pseudo-aleatoriedade, porém, as vezes é necessário comparar alguns resultados ao modificar um parâmetro ou outro.
-Para isso, o modo *debug* fixa a *seed* para a geração de números aleatórios e faz com que o resultado seja sempre o mesmo para uma dada *seed*.
+Para isso, o modo *debug* fixa a *seed* para a geração de números aleatórios e faz com que o resultado da simulação seja sempre o mesmo para uma dada *seed*.
 
 Para rodar a simulação em modo *debug*, descomente a linha de código que contém ```#define DEBUG_MODE``` em *debug.h*.
 O valor atribuido para o *seed* será o definido na variável ```RANDOM_SEED```.
