@@ -20,16 +20,16 @@ void criaPasta(const char* folderName, bool printMsg){
 
 
 void printBarraProgresso(double progresso){
-        int tamanhoBarra = 100;
-        std::cout << '[';
-        int pos = tamanhoBarra * progresso;
-        for (int i = 0; i < tamanhoBarra; ++i) {
-            if (i < pos) std::cout << '=';
-            else if (i == pos) std::cout << '>';
-            else std::cout << ' ';
-        }
-        std::cout << "] " << int(progresso * 100.0) << " %\r";
-        std::cout.flush();
+    int tamanhoBarra = 100;
+    std::cout << '[';
+    int pos = tamanhoBarra * progresso;
+    for (int i = 0; i < tamanhoBarra; ++i) {
+        if (i < pos) std::cout << '=';
+        else if (i == pos) std::cout << '>';
+        else std::cout << ' ';
+    }
+    std::cout << "] " << int(progresso * 100.0) << " %\r";
+    std::cout.flush();
 }
 
 
