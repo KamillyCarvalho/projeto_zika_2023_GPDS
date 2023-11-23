@@ -6,6 +6,8 @@
 
 /* Variaveis de configuracao */
 extern const char nomePastaResultados[];
+static char nomePastaEstagioSemana[10];
+
 
 /* extern indica que a variavel está declarada e inicializada em outro local (constantes.cpp) */
 /* Variaveis utilizadas na simulacao */
