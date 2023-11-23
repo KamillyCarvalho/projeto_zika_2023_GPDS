@@ -1,21 +1,23 @@
 #include "../headers/uteis.h"
 
-void criaPasta(const char* folderName, bool printMsg){
-    struct stat st;
-    if (stat(folderName, &st) == 0)
-    {
-        // Se o diretório já existe, remove-o
-        std::string command = "rm -rf " + std::string(folderName);
-        int result = system(command.c_str());
-        if(!result and printMsg)
-            printf("Erro ao tentar criar pasta \"%s\"\n", folderName);
+/* 
+    Cria pasta no caminho especificado.
+    Caso já exista, a pasta atual é removida e é criada uma nova.
+*/
+void criaPasta(const char* caminhoPastaASerCriada, bool infoMsg){
+    namespace fs = std::filesystem;
+    fs::path diretorio(caminhoPastaASerCriada);
+    if(fs::exists(diretorio)){
+        fs::remove_all(diretorio);
     }
-    int status = mkdir(folderName, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-    if(!printMsg) return;
-    if (status == 0) 
-        printf("Pasta \"%s\" criada\n", folderName);
-    else 
-        printf("Erro ao criar pasta \"%s\"\n", folderName);
+    int ok = fs::create_directory(diretorio);
+    if(infoMsg){
+        if(ok){
+            std::cout << "Pasta em \"" << caminhoPastaASerCriada <<  "\" criada com sucesso\n";
+        }else{
+            std::cout << "Falha ao criar pasta em \"" << caminhoPastaASerCriada << "\"\n";
+        }
+    }
 }
 
 
@@ -120,10 +122,10 @@ void filtrarArquivosPorSufixo(const char *nomePastaASerRealizadoFiltro, const ch
 }
 
 char* criaPastaEstagioSemanaAtual(int estagio, int semana){
-    static char nomePastaEstagioSemana[10];
+    char temp[30];
     sprintf(nomePastaEstagioSemana, "E%dS%d", estagio, semana);
-    std::string temp = std::string(nomePastaResultados) + "/" + std::string(nomePastaEstagioSemana);
-    criaPasta(temp.c_str(), false);
+    sprintf(temp, "%s/%s", nomePastaResultados, nomePastaEstagioSemana);
+    criaPasta(temp, false);
     return nomePastaEstagioSemana;
 }
 
