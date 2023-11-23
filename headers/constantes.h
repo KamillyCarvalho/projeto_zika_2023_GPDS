@@ -6,10 +6,12 @@
 
 /* Variaveis de configuracao */
 extern const char nomePastaResultados[];
-static char nomePastaEstagioSemana[10];
+
+ // nao constante, mas faz parte das configs, armazena nome de pasta que altera a cada iteracao
+static char nomePastaEstagioSemana[10]; 
 
 
-/* extern indica que a variavel está declarada e inicializada em outro local (constantes.cpp) */
+/* extern indica que a variavel esta declarada e inicializada em outro local (constantes.cpp) */
 /* Variaveis utilizadas na simulacao */
 extern const int NUM_ARTERIAS;
 extern const int rota[];
