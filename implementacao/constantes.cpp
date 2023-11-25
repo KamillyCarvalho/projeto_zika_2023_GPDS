@@ -30,9 +30,9 @@ const double fracaoRefletida = 1 - fracaoAbsorvida;
 const double limiteY = 1e-3;
 const double passoY = 1e-3;
 
-const std::vector<int> estagio1 = {6'558'050, 1'000, 1'000, 1'000};
-const std::vector<int> estagio2 = {1'000, 1'000, 1'000, 1'000};
-const std::vector<int> estagio3 = {1'000, 1'000, 1'000, 1'000};
+const std::vector<int> estagio1 = {10'000, 10'000, 10'000, 10'000};
+const std::vector<int> estagio2 = {10'000, 10'000, 10'000, 10'000};
+const std::vector<int> estagio3 = {10'000, 10'000, 10'000, 10'000};
 const std::vector<std::vector<int>> ESTAGIOS = {estagio1, estagio2, estagio3};
 
 /*
