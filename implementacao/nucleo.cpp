@@ -23,6 +23,7 @@ void rotina()
         }
     }
 
+    auto momentoInicioSimulacao = sch::high_resolution_clock::now(); // para contar tempo de simulacao (inicio)
     for (int particulaAtual = 1, percentualFinalizado = -1; particulaAtual <= quantidadeParticulas; particulaAtual++)
     {
         /* Reset variaveis relacionadas a particula atual */
@@ -45,8 +46,10 @@ void rotina()
         if (contadorAbsorvidas == 0 && contadorParticulaIrma == 0)
             arquivoSaida3 << particulaAtual << "," << rota[arteriaAtual] << "," << contadorTempoParticula * INCREMENTO_TEMPO << ",\n";
     }
+    auto momentoTerminoSimulacao = std::chrono::high_resolution_clock::now(); // para contar tempo de simulacao (fim)
     std::cout << std::endl;
-    std::cout << "Salvando resultados..." << std::endl;
+    informarTempoDecorridoSimulacao(momentoInicioSimulacao, momentoTerminoSimulacao);
+    std::cout << "Salvando resultados..." << std::endl << std::endl;
     arquivoSaida1.close();
     arquivoSaida2.close();
     arquivoSaida3.close();

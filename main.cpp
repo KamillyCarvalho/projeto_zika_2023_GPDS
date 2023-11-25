@@ -31,6 +31,7 @@ std::ofstream arquivoSaida3;
 /* Funcao principal */
 int main()
 {
+    auto momentoInicioExecucao = sch::high_resolution_clock::now();
     informaSeModoDebug();
     criaPasta(nomePastaResultados, false);
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
@@ -58,5 +59,7 @@ int main()
         }
     }
     filtrarArquivosPorSufixo(nomePastaResultados, "received_particles.csv", "filtrados");
+    auto momentoTerminoExecucao = sch::high_resolution_clock::now();
+    std::cout << "Tempo de execucao do codigo: " << diferencaTempo(momentoInicioExecucao, momentoTerminoExecucao) << std::endl;
     return 0;
 }
