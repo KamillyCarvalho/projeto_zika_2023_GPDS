@@ -155,3 +155,22 @@ std::string numeroComSeparador(int numero){
     for(int i = 0; i < n / 2; i++) std::swap(separada[i], separada[n - i - 1]);
     return separada;
 }
+
+std::string diferencaTempo(chpoint inicio, chpoint fim){
+    chdd tempoTotal = sch::duration_cast<chdd>(fim - inicio);
+    double tempoTotalEmSegundos = tempoTotal.count();
+
+    std::stringstream ss;
+    if(tempoTotalEmSegundos > 60.0){
+        int minutos = static_cast<int>(tempoTotalEmSegundos) / 60;
+        int segundos = static_cast<int>(tempoTotalEmSegundos) % 60;
+        ss << minutos << " minuto" << (minutos > 1? "s" : "") << " e " << segundos << " segundo" << (segundos > 1? "s" : "");
+    }else{
+        ss << std::fixed << std::setprecision(2) << tempoTotalEmSegundos << " (s)";
+    }
+    return ss.str();
+}
+
+void informarTempoDecorridoSimulacao(chpoint inicial, chpoint final){
+    std::cout << "Tempo decorrido: " << diferencaTempo(inicial, final) << std::endl;
+}
