@@ -112,13 +112,13 @@ unsigned int seedParaRand(){
     #endif
 }
 
-void filtrarArquivosPorSufixo(const char *nomePastaASerRealizadoFiltro, const char *sufixoASerFiltrado){
+void filtrarArquivosPorSufixo(const char *nomePastaASerRealizadoFiltro, const char *sufixoASerFiltrado, const char *nomePastaDestino){
     char command[300];
-    criaPasta("filtrados", false);
+    criaPasta(nomePastaDestino, false);
     #ifdef _WIN32
-        sprintf(command, "forfiles /S /M \"*%s\" /C \"cmd /c if @isdir==FALSE copy @file ./filtrados\"", nomePastaASerRealizadoFiltro, sufixoASerFiltrado);
+        sprintf(command, "xcopy /Y /C %s\\*%s %s\\", nomePastaASerRealizadoFiltro, sufixoASerFiltrado, nomePastaDestino);
     #else
-        sprintf(command, "find ./%s -type f -name \"*%s\" -exec cp {} ./filtrados \\;", nomePastaASerRealizadoFiltro, sufixoASerFiltrado);
+        sprintf(command, "find ./%s -type f -name \"*%s\" -exec cp {} ./%s \\;", nomePastaASerRealizadoFiltro, sufixoASerFiltrado, nomePastaDestino);
     #endif
     int status = system(command);
     if(status != 0)

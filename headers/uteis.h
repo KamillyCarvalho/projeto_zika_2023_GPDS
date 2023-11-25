@@ -10,7 +10,7 @@
 #define UTEIS_H
     void printBarraProgresso(double progresso);
     void criaPasta(const char* nomePasta, bool infoMsg);
-    void filtrarArquivosPorSufixo(const char *nomePastaASerRealizadoFiltro, const char *sufixoASerFiltrado);
+    void filtrarArquivosPorSufixo(const char *nomePastaASerRealizadoFiltro, const char *sufixoASerFiltrado, const char *nomePastaDestino);
     void informaSeModoDebug();
     char* criaPastaEstagioSemanaAtual(int estagio, int semana);
     std::string numeroPorExtenso(int numero);
