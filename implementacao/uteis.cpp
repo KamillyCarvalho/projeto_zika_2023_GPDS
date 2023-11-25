@@ -140,3 +140,18 @@ void informaSeModoDebug(){
         std::cout << std::endl << "Codigo rodando em modo NORMAL" <<  std::endl << std::endl;
     #endif
 }
+
+std::string numeroComSeparador(int numero){
+    std::string num = std::to_string(numero);
+    std::string separada = "";
+    for(int i = (int) num.size() - 1, cont = 0; i >= 0; i--, cont++){
+        if(cont == 3){
+            separada += '\'';
+            cont = 0;
+        }
+        separada += num[i];
+    }
+    int n = (int) separada.size();
+    for(int i = 0; i < n / 2; i++) std::swap(separada[i], separada[n - i - 1]);
+    return separada;
+}

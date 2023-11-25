@@ -14,6 +14,7 @@
     void informaSeModoDebug();
     char* criaPastaEstagioSemanaAtual(int estagio, int semana);
     std::string numeroPorExtenso(int numero);
+    std::string numeroComSeparador(int numero);
     unsigned int seedParaRand();
 
 #endif
