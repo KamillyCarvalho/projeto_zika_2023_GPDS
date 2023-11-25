@@ -47,7 +47,7 @@ int main()
             quantidadeParticulas = ESTAGIOS[numEstagio][semanaAtual]; // seta variavel global
             
             /* Print msg no terminal */
-            std::cout << "SEMANA " << semanaAtual + 1 << " -> Simulando " << quantidadeParticulas << \
+            std::cout << "SEMANA " << semanaAtual + 1 << " -> Simulando " << numeroComSeparador(quantidadeParticulas) << \
             ' ' << '(' << numeroPorExtenso(quantidadeParticulas) << ')' << " particulas" << '\n';
 
             /* Chama rotina */
