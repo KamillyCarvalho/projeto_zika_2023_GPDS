@@ -116,7 +116,7 @@ void filtrarArquivosPorSufixo(const char *nomePastaASerRealizadoFiltro, const ch
     char command[300];
     criaPasta(nomePastaDestino, false);
     #ifdef _WIN32
-        sprintf(command, "xcopy /Y /C %s\\*%s %s\\", nomePastaASerRealizadoFiltro, sufixoASerFiltrado, nomePastaDestino);
+        sprintf(command, "PowerShell -Command \"Get-ChildItem -Path .\\%s -Recurse -Filter '*%s' | Copy-Item -Destination .\\%s -Force\"", nomePastaASerRealizadoFiltro, sufixoASerFiltrado, nomePastaDestino);
     #else
         sprintf(command, "find ./%s -type f -name \"*%s\" -exec cp {} ./%s \\;", nomePastaASerRealizadoFiltro, sufixoASerFiltrado, nomePastaDestino);
     #endif
