@@ -36,7 +36,7 @@ int main()
     criaPasta(nomePastaResultados, false);
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
         auto momentoInicioEstagio = sch::high_resolution_clock::now();
-        std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
+        std::cout << "ESTAGIO " << numEstagio + 1 << std::endl;
         for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
             /* Cria pasta com resultados do estagio atual e semana atual e retorna nome da pasta */
             char *nomePastaEstagioSemana = criaPastaEstagioSemanaAtual(numEstagio + 1, semanaAtual + 1);
@@ -50,7 +50,7 @@ int main()
             
             /* Print msg no terminal */
             std::cout << "SEMANA " << semanaAtual + 1 << " -> Simulando " << numeroComSeparador(quantidadeParticulas) << \
-            ' ' << '(' << numeroPorExtenso(quantidadeParticulas) << ')' << " particulas" << '\n';
+            ' ' << '(' << numeroPorExtenso(quantidadeParticulas) << ')' << " particulas" << std::endl;
 
             /* Chama rotina */
             rotina();
