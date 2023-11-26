@@ -3,7 +3,6 @@
 #include "uteis.h"
 #include <fstream> // funcoes para manipulacao de arquivos
 
-
 #ifndef NUCLEO_H
 #define NUCLEO_H
     /* Funcoes gerais */

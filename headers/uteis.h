@@ -23,5 +23,4 @@ typedef sch::duration<double> chdd;
     std::string numeroComSeparador(int numero);
     std::string diferencaTempo(chpoint inicio, chpoint fim);
     unsigned int seedParaRand();
-
 #endif
