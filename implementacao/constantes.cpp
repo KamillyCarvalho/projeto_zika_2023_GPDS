@@ -4,7 +4,7 @@
     Configuracoes de nomes de pastas e arquivos
 */
 const char nomePastaResultados[] = "resultados";
-
+const char nomePastaFiltrados[] = "filtrados";
 /*
     Constantes utilizadas na simulacao
 */

@@ -58,7 +58,7 @@ int main()
             primeiraASerRecebida = true;
         }
     }
-    filtrarArquivosPorSufixo(nomePastaResultados, "received_particles.csv", "filtrados");
+    filtrarArquivosPorSufixo(nomePastaResultados, "received_particles.csv", nomePastaFiltrados);
     auto momentoTerminoExecucao = sch::high_resolution_clock::now();
     std::cout << "Tempo total de execucao do codigo: " << diferencaTempo(momentoInicioExecucao, momentoTerminoExecucao) << std::endl;
     return 0;
