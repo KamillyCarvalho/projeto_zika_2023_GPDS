@@ -35,6 +35,7 @@ int main()
     informaSeModoDebug();
     criaPasta(nomePastaResultados, false);
     for(int numEstagio = 0; numEstagio < (int) ESTAGIOS.size(); numEstagio++){
+        auto momentoInicioEstagio = sch::high_resolution_clock::now();
         std::cout << "ESTAGIO " << numEstagio + 1 << '\n';
         for(int semanaAtual = 0; semanaAtual < (int) ESTAGIOS[numEstagio].size(); semanaAtual++){
             /* Cria pasta com resultados do estagio atual e semana atual e retorna nome da pasta */
@@ -57,6 +58,8 @@ int main()
             /* Reset variavel para proxima iteracao */
             primeiraASerRecebida = true;
         }
+        auto momentoTerminoEstagio = sch::high_resolution_clock::now();
+        std::cout << "Tempo total de execucao do ESTAGIO " << numEstagio + 1 << ": " << diferencaTempo(momentoInicioEstagio, momentoTerminoEstagio) << std::endl << std::endl;
     }
     filtrarArquivosPorSufixo(nomePastaResultados, "received_particles.csv", nomePastaFiltrados);
     auto momentoTerminoExecucao = sch::high_resolution_clock::now();
