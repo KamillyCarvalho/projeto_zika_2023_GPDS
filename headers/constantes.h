@@ -1,11 +1,12 @@
 #include <vector>
 #include <random>
 
-#ifndef ZIKA_CONSTANTS_H
-#define ZIKA_CONSTANTS_H
+#ifndef SIMU_CONSTANTS_H
+#define SIMU_CONSTANTS_H
 
 /* Variaveis de configuracao */
 extern const char nomePastaResultados[];
+extern const char nomePastaFiltrados[];
 
  // nao constante, mas faz parte das configs, armazena nome de pasta que altera a cada iteracao
 static char nomePastaEstagioSemana[10]; 
